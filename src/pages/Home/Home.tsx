@@ -1,8 +1,10 @@
+import { Typography } from '@mui/material'
+
 const Home = () => {
   return (
-    <div>
+    <Typography>
       Домашняя страница
-    </div>
+    </Typography>
   )
 }
 
