@@ -1,4 +1,5 @@
 import {
+  Box,
   Divider,
   Drawer,
   List,
@@ -50,8 +51,14 @@ const Sidebar = () => {
         },
       }}
     >
-      <Toolbar component={NavLink} to={'/'}>
-        <Logo />
+      <Toolbar>
+        <Box
+          component={NavLink}
+          to={'/'}
+          sx={{ textDecoration: 'none', color: 'inherit' }}
+        >
+          <Logo />
+        </Box>
       </Toolbar>
       <Divider />
       <List>

@@ -10,7 +10,7 @@ const Logo = () => {
         width="44"
         height="44"
       />
-      <Typography>Управление общежитием</Typography>
+      <Typography sx={{fontWeight: 700, fontSize: '20px'}}>DormManager</Typography>
     </Box>
   )
 }
