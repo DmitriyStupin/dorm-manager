@@ -1,44 +1,20 @@
-import {
-  Box,
-  Drawer,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material'
-import IconButton from '@mui/material/IconButton'
-import DashboardIcon from '@mui/icons-material/Dashboard'
-import PersonIcon from '@mui/icons-material/Person'
-import DoorIcon from '@mui/icons-material/SensorDoor'
-import RequestIcon from '@mui/icons-material/Description'
-import MenuIcon from '@mui/icons-material/Menu'
-import {useState} from "react";
+import { Routes, Route } from 'react-router-dom'
+import Home from './pages/Home/Home.tsx'
+import Layout from "./components/Layout/Layout.tsx";
+import Requests from "./pages/Requests/Requests.tsx";
+import Rooms from "./pages/Rooms/Rooms.tsx";
+import Students from "./pages/Students/Students.tsx";
 
 const App = () => {
-  const [open, setOpen] = useState(false)
-
-  const handleDrawer = () => {
-    setOpen(prev => !prev)
-  }
-
   return (
-    <Box sx={{ display: 'flex', gap: '100px' }}>
-      <Drawer open={open} variant={'permanent'} anchor={'left'} sx={{ bgcolor: 'blue' }}>
-        <List>
-          {['Главная страница', 'Студенты', 'Комнаты', 'Заявки'].map((item, index) => (
-            <ListItem key={index}>
-              <ListItemIcon>
-                {index === 0 ? <DashboardIcon /> : index === 1 ? <PersonIcon /> : index === 2 ? <DoorIcon /> : <RequestIcon/>}
-              </ListItemIcon>
-              <ListItemText primary={item} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-      <IconButton onClick={handleDrawer} color='inherit' >
-        <MenuIcon />
-      </IconButton>
-    </Box>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path={'/'} element={<Home />} />
+        <Route path={'/requests'} element={<Requests />} />
+        <Route path={'/rooms'} element={<Rooms />} />
+        <Route path={'/students'} element={<Students />} />
+      </Route>
+    </Routes>
   )
 }
 

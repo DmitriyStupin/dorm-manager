@@ -1,0 +1,19 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background -->
+    <rect width="256" height="256" rx="48" fill="#1E293B"/>
+
+    <!-- Sidebar shape -->
+    <rect x="36" y="36" width="64" height="184" rx="16" fill="#334155"/>
+
+    <!-- Main content blocks -->
+    <rect x="116" y="56" width="104" height="28" rx="8" fill="#60A5FA"/>
+    <rect x="116" y="100" width="80" height="20" rx="6" fill="#94A3B8"/>
+    <rect x="116" y="132" width="104" height="20" rx="6" fill="#94A3B8"/>
+    <rect x="116" y="164" width="72" height="20" rx="6" fill="#94A3B8"/>
+
+    <!-- Icon dots in sidebar -->
+    <circle cx="68" cy="68" r="8" fill="#60A5FA"/>
+    <circle cx="68" cy="108" r="8" fill="#94A3B8"/>
+    <circle cx="68" cy="148" r="8" fill="#94A3B8"/>
+    <circle cx="68" cy="188" r="8" fill="#94A3B8"/>
+</svg>
