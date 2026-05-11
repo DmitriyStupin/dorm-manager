@@ -6,17 +6,17 @@ export const cardsInfo = [
   {
     icon: <PersonIcon />,
     value: 248,
-    title: 'Всего студентов',
+    title: 'Всего мест',
   },
   {
     icon: <DoorIcon />,
-    value: 156,
-    title: 'Занято комнат',
+    value: 200,
+    title: 'Занято мест',
   },
   {
     icon: <DoorIcon />,
-    value: 44,
-    title: 'Свободно комнат',
+    value: 48,
+    title: 'Свободно мест',
   },
   {
     icon: <RequestIcon />,

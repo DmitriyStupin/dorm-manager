@@ -45,7 +45,7 @@ const OccupancyChart = () => {
       />
       <Typography variant={'subtitle1'}>
         Занятость{' '}
-        {(cardsInfo[1].value / (cardsInfo[1].value + cardsInfo[2].value)) * 100}
+        {Math.round((cardsInfo[1].value / (cardsInfo[1].value + cardsInfo[2].value)) * 100)}
         %
       </Typography>
     </Box>
