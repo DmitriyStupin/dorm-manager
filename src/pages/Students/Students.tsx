@@ -1,11 +1,5 @@
-
-
 const Students = () => {
-  return (
-    <div>
-      Students page
-    </div>
-  )
+  return <div>Students page</div>
 }
 
 export default Students

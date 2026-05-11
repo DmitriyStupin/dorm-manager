@@ -1,19 +1,14 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-} from '@mui/material'
-import * as React from "react";
+import { Box, Card, CardContent, Typography } from '@mui/material'
+import * as React from 'react'
 
 type StatCardProps = {
-  title: string;
-  icon: React.ReactNode;
-  value: number;
+  title: string
+  icon: React.ReactNode
+  value: number
 }
 
 const StatCard = (props: StatCardProps) => {
-  const {title, icon, value} = props
+  const { title, icon, value } = props
 
   return (
     <Card variant={'outlined'} key={title} sx={{ borderRadius: 2 }}>
@@ -36,6 +31,6 @@ const StatCard = (props: StatCardProps) => {
       </CardContent>
     </Card>
   )
-};
+}
 
-export default StatCard;
+export default StatCard

@@ -1,17 +1,17 @@
 import { Routes, Route } from 'react-router-dom'
 import Home from './pages/Home/Home.tsx'
-import Layout from "./components/Layout/Layout.tsx";
-import Requests from "./pages/Requests/Requests.tsx";
-import Rooms from "./pages/Rooms/Rooms.tsx";
-import Students from "./pages/Students/Students.tsx";
+import Layout from './components/Layout/Layout.tsx'
+import Requests from './pages/Requests/Requests.tsx'
+import Rooms from './pages/Rooms/Rooms.tsx'
+import Students from './pages/Students/Students.tsx'
 import '@fontsource-variable/jetbrains-mono/wght.css'
-import {createTheme, ThemeProvider} from "@mui/material";
+import { createTheme, ThemeProvider } from '@mui/material'
 
 const App = () => {
   const theme = createTheme({
     typography: {
-      fontFamily: "'JetBrains Mono Variable', monospace"
-    }
+      fontFamily: "'JetBrains Mono Variable', monospace",
+    },
   })
 
   return (

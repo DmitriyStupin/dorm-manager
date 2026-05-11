@@ -6,7 +6,16 @@ const Layout = () => {
   return (
     <Box sx={{ display: 'flex' }}>
       <Sidebar />
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
+        }}
+      >
         <Outlet />
       </Box>
     </Box>

@@ -1,11 +1,5 @@
-
-
 const Requests = () => {
-  return (
-    <div>
-      Странрца заявок
-    </div>
-  )
+  return <div>Странрца заявок</div>
 }
 
 export default Requests

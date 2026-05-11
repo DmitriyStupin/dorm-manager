@@ -14,13 +14,13 @@ const OccupancyChart = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        mt: 4,
         background: '#ffffff',
         paddingBlock: 3,
         borderRadius: 2,
+        border: '1px solid rgba(0, 0, 0, 0.12)',
       }}
     >
-      <Typography variant={'h5'}>Заполненность комнат</Typography>
+      <Typography variant={'h6'}>Заполненность комнат</Typography>
       <PieChart
         width={400}
         height={300}
