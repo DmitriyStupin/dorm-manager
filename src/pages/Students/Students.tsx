@@ -18,6 +18,8 @@ import AddIcon from '@mui/icons-material/Add'
 import Paper from '@mui/material/Paper'
 import * as React from 'react'
 import { useState } from 'react'
+import StudentFormDialog
+  from "../../components/StudentFormDialog/StudentFormDialog.tsx";
 
 const Students = () => {
   const students = [
@@ -116,6 +118,15 @@ const Students = () => {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [searchItem, setSearchItem] = useState('')
+  const [open, setOpen] = useState(false)
+
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
 
   const start = page * rowsPerPage
   const end = start + rowsPerPage
@@ -171,9 +182,11 @@ const Students = () => {
           }}
           variant={'contained'}
           startIcon={<AddIcon />}
+          onClick={handleClickOpen}
         >
           Добавить студента
         </Button>
+        <StudentFormDialog open={open} handleClose={handleClose} />
       </Box>
       <TableContainer
         component={Paper}
