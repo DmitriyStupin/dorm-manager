@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogTitle,
   FormControl,
@@ -12,8 +11,8 @@ import {
   Select,
   TextField,
 } from '@mui/material'
-import { useState } from 'react'
-import type {StudentFormData} from "../../types/student.ts";
+import type { StudentFormData } from '../../types/student.ts'
+import { Controller, useForm } from 'react-hook-form'
 
 type StudentFormDialogProps = {
   open: boolean
@@ -21,44 +20,34 @@ type StudentFormDialogProps = {
   onSubmit: (student: StudentFormData) => void
 }
 
+const rooms = ['101', '102', '103', '104', '105', '106', '107']
+
 const StudentFormDialog = (props: StudentFormDialogProps) => {
   const { open, handleClose, onSubmit } = props
-
-  const [formData, setFormData] = useState<StudentFormData>({
-    fullName: '',
-    course: '',
-    room: '',
-    institute: '',
-    phone: ''
-  })
-
-  const handleChange = (field: keyof StudentFormData, value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }))
-  }
-
-  const rooms = ['101', '102', '103', '104', '105', '106', '107']
-
-  const handleSubmit = () => {
-    onSubmit(formData)
-    handleClose()
-    setFormData({
+  const { register, handleSubmit, reset, control } = useForm<StudentFormData>({
+    defaultValues: {
       fullName: '',
       course: '',
       room: '',
       institute: '',
       phone: '',
-    })
+    },
+  })
+
+  const submitHandler = (data: StudentFormData) => {
+    onSubmit(data)
+    handleClose()
+    reset()
   }
 
   return (
     <Dialog fullWidth maxWidth="sm" open={open} onClose={handleClose}>
       <DialogTitle>Добавить студента</DialogTitle>
+
       <DialogContent sx={{ px: 3, pt: 2 }}>
         <Box
           component={'form'}
+          onSubmit={handleSubmit(submitHandler)}
           sx={{
             display: 'flex',
             flexDirection: 'column',
@@ -69,87 +58,82 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
           <TextField
             required
             label={'ФИО'}
-            variant={'outlined'}
             type={'text'}
-            value={formData.fullName}
-            onChange={(event) => {
-              handleChange('fullName', event.target.value)
-            }}
+            {...register('fullName')}
           />
-          <FormControl>
-            <InputLabel id={'course-select'} required>
-              Курс
-            </InputLabel>
-            <Select
-              id="course-select"
-              required
-              label="Курс"
-              value={formData.course}
-              onChange={(event) => {
-                handleChange('course', event.target.value)
-              }}
-            >
-              <MenuItem value={'1'}>1</MenuItem>
-              <MenuItem value={'2'}>2</MenuItem>
-              <MenuItem value={'3'}>3</MenuItem>
-              <MenuItem value={'4'}>4</MenuItem>
-              <MenuItem value={'5'}>5</MenuItem>
-              <MenuItem value={'6'}>6</MenuItem>
-            </Select>
-          </FormControl>
-
-          <Autocomplete
-            disablePortal
-            value={formData.room}
-            onChange={(_, newValue) => {
-              handleChange('room', newValue || '')
-            }}
-            renderInput={(params) => (
-              <TextField {...params} label={'Комната'} />
+          <Controller
+            name={'course'}
+            control={control}
+            render={({ field }) => (
+              <FormControl fullWidth>
+                <InputLabel id={'course-select'}>Курс</InputLabel>
+                <Select
+                  id="course-select"
+                  label="Курс"
+                  value={field.value}
+                  onChange={field.onChange}
+                >
+                  <MenuItem value={'1'}>1</MenuItem>
+                  <MenuItem value={'2'}>2</MenuItem>
+                  <MenuItem value={'3'}>3</MenuItem>
+                  <MenuItem value={'4'}>4</MenuItem>
+                  <MenuItem value={'5'}>5</MenuItem>
+                  <MenuItem value={'6'}>6</MenuItem>
+                </Select>
+              </FormControl>
             )}
-            options={rooms}
           />
 
-          <FormControl>
-            <InputLabel id={'institute-select'} required>
-              Институт
-            </InputLabel>
-            <Select
-              id="institute-select"
-              required
-              label="Институт"
-              value={formData.institute}
-              onChange={(event) => {
-                handleChange('institute', event.target.value)
-              }}
-            >
-              <MenuItem value={'ИКИТ'}>ИКИТ</MenuItem>
-              <MenuItem value={'ИУБП'}>ИУБП</MenuItem>
-              <MenuItem value={'ПИ'}>ПИ</MenuItem>
-            </Select>
-          </FormControl>
+          <Controller
+            control={control}
+            name={'room'}
+            render={({ field }) => (
+              <Autocomplete
+                options={rooms}
+                value={field.value || null}
+                onChange={(_, value) => field.onChange(value || '')}
+                renderInput={(params) => (
+                  <TextField {...params} label={'Комната'} />
+                )}
+              />
+            )}
+          />
+
+          <Controller
+            name={'institute'}
+            control={control}
+            render={({ field }) => (
+              <FormControl fullWidth>
+                <InputLabel id={'institute-select'}>Институт</InputLabel>
+                <Select
+                  id="institute-select"
+                  label="Институт"
+                  value={field.value}
+                  onChange={field.onChange}
+                >
+                  <MenuItem value={'ИКИТ'}>ИКИТ</MenuItem>
+                  <MenuItem value={'ИУБП'}>ИУБП</MenuItem>
+                  <MenuItem value={'ПИ'}>ПИ</MenuItem>
+                </Select>
+              </FormControl>
+            )}
+          />
 
           <TextField
             required
-            name={'phone'}
             label={'Номер телефона'}
             type={'tel'}
-            variant={'outlined'}
-            value={formData.phone}
-            onChange={(event) => {
-              handleChange('phone', event.target.value)
-            }}
+            {...register('phone')}
           />
+
+          <Button type={'submit'} variant={'contained'} color={'info'}>
+            Сохранить
+          </Button>
+          <Button variant={'outlined'} color={'error'} onClick={handleClose}>
+            Отмена
+          </Button>
         </Box>
       </DialogContent>
-      <DialogActions sx={{ px: 3, pb: 3, gap: 1 }}>
-        <Button variant={'outlined'} color={'error'} onClick={handleClose}>
-          Отмена
-        </Button>
-        <Button onClick={handleSubmit} variant={'contained'} color={'info'}>
-          Сохранить
-        </Button>
-      </DialogActions>
     </Dialog>
   )
 }

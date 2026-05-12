@@ -158,6 +158,7 @@ const Students = () => {
 
     setStudents(prev => [...prev, newStudent])
   }
+  
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
