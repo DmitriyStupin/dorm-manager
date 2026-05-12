@@ -13,25 +13,18 @@ import {
   TextField,
 } from '@mui/material'
 import { useState } from 'react'
+import type {StudentFormData} from "../../types/student.ts";
 
 type StudentFormDialogProps = {
   open: boolean
   handleClose: () => void
-  onSubmit: (student: FormData) => void
-}
-
-type FormData = {
-  fullName: string
-  course: string
-  room: string
-  institute: string
-  phone: string
+  onSubmit: (student: StudentFormData) => void
 }
 
 const StudentFormDialog = (props: StudentFormDialogProps) => {
   const { open, handleClose, onSubmit } = props
 
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<StudentFormData>({
     fullName: '',
     course: '',
     room: '',
@@ -39,10 +32,10 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
     phone: ''
   })
 
-  const handleChange = (field: keyof FormData, value: string) => {
+  const handleChange = (field: keyof StudentFormData, value: string) => {
     setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }))
   }
 

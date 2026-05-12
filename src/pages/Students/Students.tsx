@@ -20,16 +20,7 @@ import * as React from 'react'
 import { useState } from 'react'
 import StudentFormDialog
   from "../../components/StudentFormDialog/StudentFormDialog.tsx";
-
-type Student = {
-  id: number
-  fullName: string
-  room: string
-  institute: string
-  course: string
-  phone: string
-  status: string
-}
+import type { Student, StudentFormData } from '../../types/student.ts'
 
 const Students = () => {
   const [students, setStudents] = useState<Student[]>([
@@ -158,9 +149,9 @@ const Students = () => {
     setPage(0)
   }
 
-  const handleAddStudent = (data) => {
-    const newStudent = {
-      id: Date.now,
+  const handleAddStudent = (data: StudentFormData) => {
+    const newStudent: Student = {
+      id: Date.now(),
       ...data,
       status: 'Проживает'
     }
