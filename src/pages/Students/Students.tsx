@@ -21,99 +21,109 @@ import { useState } from 'react'
 import StudentFormDialog
   from "../../components/StudentFormDialog/StudentFormDialog.tsx";
 
+type Student = {
+  id: number
+  fullName: string
+  room: string
+  institute: string
+  course: string
+  phone: string
+  status: string
+}
+
 const Students = () => {
-  const students = [
+  const [students, setStudents] = useState<Student[]>([
     {
       id: 1,
       fullName: 'Иванов Иван Иванович',
-      room: 101,
+      room: '101',
       institute: 'ИКИТ',
-      course: 2,
+      course: '2',
       phone: '+7 (999) 123-45-67',
       status: 'Проживает',
     },
     {
       id: 2,
       fullName: 'Петров Петр Сергеевич',
-      room: 203,
+      room: '203',
       institute: 'ПИ',
-      course: 3,
+      course: '3',
       phone: '+7 (999) 234-56-78',
       status: 'Проживает',
     },
     {
       id: 3,
       fullName: 'Сидорова Анна Викторовна',
-      room: 305,
+      room: '305',
       institute: 'ИКИТ',
-      course: 1,
+      course: '1',
       phone: '+7 (999) 345-67-89',
       status: 'Выселен',
     },
     {
       id: 4,
       fullName: 'Кузнецов Дмитрий Олегович',
-      room: 412,
+      room: '412',
       institute: 'ИКИТ',
-      course: 4,
+      course: '4',
       phone: '+7 (999) 456-78-90',
       status: 'Проживает',
     },
     {
       id: 5,
       fullName: 'Морозова Екатерина Ильинична',
-      room: 118,
+      room: '118',
       institute: 'ИКИТ',
-      course: 2,
+      course: '2',
       phone: '+7 (999) 567-89-01',
       status: 'Проживает',
     },
     {
       id: 6,
       fullName: 'Васильев Артем Николаевич',
-      room: 221,
+      room: '221',
       institute: 'ПИ',
-      course: 5,
+      course: '5',
       phone: '+7 (999) 678-90-12',
       status: 'Проживает',
     },
     {
       id: 7,
       fullName: 'Орлова Мария Денисовна',
-      room: 509,
+      room: '509',
       institute: 'ИУБП',
-      course: 3,
+      course: '3',
       phone: '+7 (999) 789-01-23',
       status: 'Проживает',
     },
     {
       id: 8,
       fullName: 'Федоров Кирилл Андреевич',
-      room: 144,
+      room: '144',
       institute: 'ПИ',
-      course: 1,
+      course: '1',
       phone: '+7 (999) 890-12-34',
       status: 'Проживает',
     },
     {
       id: 9,
       fullName: 'Соколова Виктория Павловна',
-      room: 317,
+      room: '317',
       institute: 'ИУБП',
-      course: 2,
+      course: '2',
       phone: '+7 (999) 901-23-45',
       status: 'Выселен',
     },
     {
       id: 10,
       fullName: 'Никитин Александр Романович',
-      room: 602,
+      room: '602',
       institute: 'ПИ',
-      course: 4,
+      course: '4',
       phone: '+7 (999) 012-34-56',
       status: 'Проживает',
     },
-  ]
+  ])
 
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
@@ -146,6 +156,16 @@ const Students = () => {
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
+  }
+
+  const handleAddStudent = (data) => {
+    const newStudent = {
+      id: Date.now,
+      ...data,
+      status: 'Проживает'
+    }
+
+    setStudents(prev => [...prev, newStudent])
   }
 
   return (
@@ -186,7 +206,7 @@ const Students = () => {
         >
           Добавить студента
         </Button>
-        <StudentFormDialog open={open} handleClose={handleClose} />
+        <StudentFormDialog open={open} handleClose={handleClose} onSubmit={handleAddStudent} />
       </Box>
       <TableContainer
         component={Paper}

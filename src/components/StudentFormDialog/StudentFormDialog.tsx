@@ -17,12 +17,21 @@ import { useState } from 'react'
 type StudentFormDialogProps = {
   open: boolean
   handleClose: () => void
+  onSubmit: (student: FormData) => void
+}
+
+type FormData = {
+  fullName: string
+  course: string
+  room: string
+  institute: string
+  phone: string
 }
 
 const StudentFormDialog = (props: StudentFormDialogProps) => {
-  const { open, handleClose } = props
+  const { open, handleClose, onSubmit } = props
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     fullName: '',
     course: '',
     room: '',
@@ -30,7 +39,7 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
     phone: ''
   })
 
-  const handleChange = (field: string, value: string) => {
+  const handleChange = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value
@@ -40,7 +49,15 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
   const rooms = ['101', '102', '103', '104', '105', '106', '107']
 
   const handleSubmit = () => {
-    console.log(formData)
+    onSubmit(formData)
+    handleClose()
+    setFormData({
+      fullName: '',
+      course: '',
+      room: '',
+      institute: '',
+      phone: '',
+    })
   }
 
   return (
