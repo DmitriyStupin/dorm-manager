@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Chip,
+  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -14,12 +15,12 @@ import {
 } from '@mui/material'
 import InputAdornment from '@mui/material/InputAdornment'
 import SearchIcon from '@mui/icons-material/Search'
+import ClearIcon from '@mui/icons-material/Clear'
 import AddIcon from '@mui/icons-material/Add'
 import Paper from '@mui/material/Paper'
 import * as React from 'react'
 import { useState } from 'react'
-import StudentFormDialog
-  from "../../components/StudentFormDialog/StudentFormDialog.tsx";
+import StudentFormDialog from '../../components/StudentFormDialog/StudentFormDialog.tsx'
 import type { Student, StudentFormData } from '../../types/student.ts'
 
 const Students = () => {
@@ -153,12 +154,15 @@ const Students = () => {
     const newStudent: Student = {
       id: Date.now(),
       ...data,
-      status: 'Проживает'
+      status: 'Проживает',
     }
 
-    setStudents(prev => [...prev, newStudent])
+    setStudents((prev) => [...prev, newStudent])
   }
-  
+
+  const handleClear = () => {
+    setSearchItem('')
+  }
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -184,6 +188,13 @@ const Students = () => {
                   <SearchIcon />
                 </InputAdornment>
               ),
+              endAdornment: (
+                <InputAdornment position={'end'}>
+                  <IconButton onClick={handleClear} edge={'end'}>
+                    <ClearIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
             },
           }}
         />
@@ -198,7 +209,11 @@ const Students = () => {
         >
           Добавить студента
         </Button>
-        <StudentFormDialog open={open} handleClose={handleClose} onSubmit={handleAddStudent} />
+        <StudentFormDialog
+          open={open}
+          handleClose={handleClose}
+          onSubmit={handleAddStudent}
+        />
       </Box>
       <TableContainer
         component={Paper}

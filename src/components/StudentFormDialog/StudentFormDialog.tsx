@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogTitle,
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
@@ -13,6 +14,8 @@ import {
 } from '@mui/material'
 import type { StudentFormData } from '../../types/student.ts'
 import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { studentSchema } from '../../student.schema.ts'
 
 type StudentFormDialogProps = {
   open: boolean
@@ -24,7 +27,14 @@ const rooms = ['101', '102', '103', '104', '105', '106', '107']
 
 const StudentFormDialog = (props: StudentFormDialogProps) => {
   const { open, handleClose, onSubmit } = props
-  const { register, handleSubmit, reset, control } = useForm<StudentFormData>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm<StudentFormData>({
+    resolver: zodResolver(studentSchema),
     defaultValues: {
       fullName: '',
       course: '',
@@ -41,7 +51,15 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
   }
 
   return (
-    <Dialog fullWidth maxWidth="sm" open={open} onClose={handleClose}>
+    <Dialog
+      fullWidth
+      maxWidth="sm"
+      open={open}
+      onClose={() => {
+        handleClose()
+        reset()
+      }}
+    >
       <DialogTitle>Добавить студента</DialogTitle>
 
       <DialogContent sx={{ px: 3, pt: 2 }}>
@@ -56,17 +74,18 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
           }}
         >
           <TextField
-            required
             label={'ФИО'}
-            type={'text'}
+            error={!!errors.fullName}
+            helperText={errors.fullName?.message}
             {...register('fullName')}
           />
           <Controller
             name={'course'}
             control={control}
             render={({ field }) => (
-              <FormControl fullWidth>
+              <FormControl fullWidth error={!!errors.course}>
                 <InputLabel id={'course-select'}>Курс</InputLabel>
+
                 <Select
                   id="course-select"
                   label="Курс"
@@ -80,6 +99,8 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
                   <MenuItem value={'5'}>5</MenuItem>
                   <MenuItem value={'6'}>6</MenuItem>
                 </Select>
+
+                <FormHelperText>{errors.course?.message}</FormHelperText>
               </FormControl>
             )}
           />
@@ -93,7 +114,12 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
                 value={field.value || null}
                 onChange={(_, value) => field.onChange(value || '')}
                 renderInput={(params) => (
-                  <TextField {...params} label={'Комната'} />
+                  <TextField
+                    error={!!errors.room}
+                    helperText={errors.room?.message}
+                    {...params}
+                    label={'Комната'}
+                  />
                 )}
               />
             )}
@@ -103,8 +129,9 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
             name={'institute'}
             control={control}
             render={({ field }) => (
-              <FormControl fullWidth>
+              <FormControl fullWidth error={!!errors.institute}>
                 <InputLabel id={'institute-select'}>Институт</InputLabel>
+
                 <Select
                   id="institute-select"
                   label="Институт"
@@ -115,21 +142,32 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
                   <MenuItem value={'ИУБП'}>ИУБП</MenuItem>
                   <MenuItem value={'ПИ'}>ПИ</MenuItem>
                 </Select>
+
+                <FormHelperText>{errors.institute?.message}</FormHelperText>
               </FormControl>
             )}
           />
 
           <TextField
-            required
             label={'Номер телефона'}
             type={'tel'}
+            error={!!errors.phone}
+            helperText={errors.phone?.message}
             {...register('phone')}
           />
 
           <Button type={'submit'} variant={'contained'} color={'info'}>
             Сохранить
           </Button>
-          <Button variant={'outlined'} color={'error'} onClick={handleClose}>
+          <Button
+            type={'button'}
+            variant={'outlined'}
+            color={'error'}
+            onClick={() => {
+              handleClose()
+              reset()
+            }}
+          >
             Отмена
           </Button>
         </Box>
