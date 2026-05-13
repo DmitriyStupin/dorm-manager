@@ -209,7 +209,6 @@ const Students = () => {
       >
         <TextField
           placeholder={'Поиск студента...'}
-          variant={'outlined'}
           value={searchItem}
           onChange={(event) => {
             setSearchItem(event.target.value)
@@ -224,7 +223,7 @@ const Students = () => {
               ),
               endAdornment: (
                 <InputAdornment position={'end'}>
-                  <IconButton onClick={handleClear} edge={'end'}>
+                  <IconButton onClick={handleClear}>
                     <ClearIcon />
                   </IconButton>
                 </InputAdornment>
@@ -267,7 +266,7 @@ const Students = () => {
               <TableCell align={'center'}>Проживает до</TableCell>
               <TableCell align={'center'}>Телефон</TableCell>
               <TableCell align={'center'}>Долг</TableCell>
-              <TableCell align={'center'}>Действие</TableCell>
+              <TableCell align={'right'}>Действия</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -296,9 +295,7 @@ const Students = () => {
                       color={student.debt === 0 ? 'success' : 'error'}
                     />
                   </TableCell>
-                  <TableCell
-                    sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}
-                  >
+                  <TableCell align={'right'}>
                     <IconButton onClick={() => handleEditStudent(student)}>
                       <EditIcon />
                     </IconButton>

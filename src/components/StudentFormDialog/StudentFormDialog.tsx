@@ -29,6 +29,7 @@ const rooms = ['101', '102', '103', '104', '105', '106', '107']
 
 const StudentFormDialog = (props: StudentFormDialogProps) => {
   const { open, handleClose, onSubmit, student } = props
+
   const {
     register,
     handleSubmit,
@@ -164,9 +165,6 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
             {...register('phone')}
           />
 
-          <Button type={'submit'} variant={'contained'} color={'info'}>
-            Сохранить
-          </Button>
           <Button
             type={'button'}
             variant={'outlined'}
@@ -177,6 +175,9 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
             }}
           >
             Отмена
+          </Button>
+          <Button type={'submit'} variant={'contained'} color={'info'}>
+            Сохранить
           </Button>
         </Box>
       </DialogContent>
