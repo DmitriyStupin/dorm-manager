@@ -12,21 +12,23 @@ import {
   Select,
   TextField,
 } from '@mui/material'
-import type { StudentFormData } from '../../types/student.ts'
+import type { Student, StudentFormData } from '../../types/student.ts'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { studentSchema } from '../../student.schema.ts'
+import {useEffect} from "react";
 
 type StudentFormDialogProps = {
   open: boolean
   handleClose: () => void
   onSubmit: (student: StudentFormData) => void
+  student: Student | null
 }
 
 const rooms = ['101', '102', '103', '104', '105', '106', '107']
 
 const StudentFormDialog = (props: StudentFormDialogProps) => {
-  const { open, handleClose, onSubmit } = props
+  const { open, handleClose, onSubmit, student } = props
   const {
     register,
     handleSubmit,
@@ -44,9 +46,28 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
     },
   })
 
+  useEffect(() => {
+    if (student) {
+      reset({
+        fullName: student.fullName,
+        course: student.course,
+        room: student.room,
+        institute: student.institute,
+        phone: student.phone,
+      })
+    } else {
+      reset({
+        fullName: '',
+        course: '',
+        room: '',
+        institute: '',
+        phone: '',
+      })
+    }
+  }, [student, reset]);
+
   const submitHandler = (data: StudentFormData) => {
     onSubmit(data)
-    handleClose()
     reset()
   }
 

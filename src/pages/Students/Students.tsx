@@ -17,6 +17,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import SearchIcon from '@mui/icons-material/Search'
 import ClearIcon from '@mui/icons-material/Clear'
 import AddIcon from '@mui/icons-material/Add'
+import EditIcon from '@mui/icons-material/Edit'
 import Paper from '@mui/material/Paper'
 import * as React from 'react'
 import { useState } from 'react'
@@ -116,19 +117,11 @@ const Students = () => {
       status: 'Проживает',
     },
   ])
-
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [searchItem, setSearchItem] = useState('')
   const [open, setOpen] = useState(false)
-
-  const handleClickOpen = () => {
-    setOpen(true)
-  }
-
-  const handleClose = () => {
-    setOpen(false)
-  }
 
   const start = page * rowsPerPage
   const end = start + rowsPerPage
@@ -138,6 +131,15 @@ const Students = () => {
   })
 
   const paginatedStudents = filteredStudents.slice(start, end)
+
+  const handleClickOpen = () => {
+    setSelectedStudent(null)
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
 
   const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage)
@@ -150,14 +152,34 @@ const Students = () => {
     setPage(0)
   }
 
-  const handleAddStudent = (data: StudentFormData) => {
-    const newStudent: Student = {
-      id: Date.now(),
-      ...data,
-      status: 'Проживает',
+  const handleEditStudent = (student: Student) => {
+    setSelectedStudent(student)
+    setOpen(true)
+  }
+
+  const handleSubmitStudent = (data: StudentFormData) => {
+    if (selectedStudent) {
+      setStudents((prev) =>
+        prev.map((student) =>
+          student.id === selectedStudent.id
+            ? {
+                ...student,
+                ...data,
+              }
+            : student,
+        ),
+      )
+    } else {
+      const newStudent: Student = {
+        id: Date.now(),
+        ...data,
+        status: 'Проживает',
+      }
+
+      setStudents((prev) => [...prev, newStudent])
     }
 
-    setStudents((prev) => [...prev, newStudent])
+    handleClose()
   }
 
   const handleClear = () => {
@@ -212,7 +234,8 @@ const Students = () => {
         <StudentFormDialog
           open={open}
           handleClose={handleClose}
-          onSubmit={handleAddStudent}
+          onSubmit={handleSubmitStudent}
+          student={selectedStudent}
         />
       </Box>
       <TableContainer
@@ -232,6 +255,7 @@ const Students = () => {
               <TableCell align={'right'}>Курс</TableCell>
               <TableCell align={'right'}>Телефон</TableCell>
               <TableCell align={'right'}>Статус</TableCell>
+              <TableCell align={'center'}>Действие</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -259,6 +283,11 @@ const Students = () => {
                         student.status === 'Проживает' ? 'success' : 'error'
                       }
                     />
+                  </TableCell>
+                  <TableCell align={'center'}>
+                    <IconButton onClick={() => handleEditStudent(student)}>
+                      <EditIcon />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))
