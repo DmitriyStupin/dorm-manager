@@ -39,7 +39,7 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
     resolver: zodResolver(studentSchema),
     defaultValues: {
       fullName: '',
-      course: '',
+      livingUntil: '',
       room: '',
       institute: '',
       phone: '',
@@ -50,7 +50,7 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
     if (student) {
       reset({
         fullName: student.fullName,
-        course: student.course,
+        livingUntil: student.livingUntil,
         room: student.room,
         institute: student.institute,
         phone: student.phone,
@@ -58,7 +58,7 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
     } else {
       reset({
         fullName: '',
-        course: '',
+        livingUntil: '',
         room: '',
         institute: '',
         phone: '',
@@ -100,30 +100,17 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
             helperText={errors.fullName?.message}
             {...register('fullName')}
           />
-          <Controller
-            name={'course'}
-            control={control}
-            render={({ field }) => (
-              <FormControl fullWidth error={!!errors.course}>
-                <InputLabel id={'course-select'}>Курс</InputLabel>
-
-                <Select
-                  id="course-select"
-                  label="Курс"
-                  value={field.value}
-                  onChange={field.onChange}
-                >
-                  <MenuItem value={'1'}>1</MenuItem>
-                  <MenuItem value={'2'}>2</MenuItem>
-                  <MenuItem value={'3'}>3</MenuItem>
-                  <MenuItem value={'4'}>4</MenuItem>
-                  <MenuItem value={'5'}>5</MenuItem>
-                  <MenuItem value={'6'}>6</MenuItem>
-                </Select>
-
-                <FormHelperText>{errors.course?.message}</FormHelperText>
-              </FormControl>
-            )}
+          <TextField
+            type="date"
+            label="Проживание до"
+            slotProps={{
+              inputLabel: {
+                shrink: true,
+              },
+            }}
+            error={!!errors.livingUntil}
+            helperText={errors.livingUntil?.message}
+            {...register('livingUntil')}
           />
 
           <Controller

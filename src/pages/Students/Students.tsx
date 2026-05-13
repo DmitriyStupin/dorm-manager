@@ -18,6 +18,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import ClearIcon from '@mui/icons-material/Clear'
 import AddIcon from '@mui/icons-material/Add'
 import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
 import Paper from '@mui/material/Paper'
 import * as React from 'react'
 import { useState } from 'react'
@@ -31,90 +32,90 @@ const Students = () => {
       fullName: 'Иванов Иван Иванович',
       room: '101',
       institute: 'ИКИТ',
-      course: '2',
+      livingUntil: '2026-05-08',
       phone: '+7 (999) 123-45-67',
-      status: 'Проживает',
+      debt: 0,
     },
     {
       id: 2,
       fullName: 'Петров Петр Сергеевич',
       room: '203',
       institute: 'ПИ',
-      course: '3',
+      livingUntil: '2027-07-31',
       phone: '+7 (999) 234-56-78',
-      status: 'Проживает',
+      debt: 0,
     },
     {
       id: 3,
       fullName: 'Сидорова Анна Викторовна',
       room: '305',
       institute: 'ИКИТ',
-      course: '1',
+      livingUntil: '2028-07-31',
       phone: '+7 (999) 345-67-89',
-      status: 'Выселен',
+      debt: 4350,
     },
     {
       id: 4,
       fullName: 'Кузнецов Дмитрий Олегович',
       room: '412',
       institute: 'ИКИТ',
-      course: '4',
+      livingUntil: '2026-07-31',
       phone: '+7 (999) 456-78-90',
-      status: 'Проживает',
+      debt: 0,
     },
     {
       id: 5,
       fullName: 'Морозова Екатерина Ильинична',
       room: '118',
       institute: 'ИКИТ',
-      course: '2',
+      livingUntil: '2026-08-15',
       phone: '+7 (999) 567-89-01',
-      status: 'Проживает',
+      debt: 0,
     },
     {
       id: 6,
       fullName: 'Васильев Артем Николаевич',
       room: '221',
       institute: 'ПИ',
-      course: '5',
+      livingUntil: '2026-07-31',
       phone: '+7 (999) 678-90-12',
-      status: 'Проживает',
+      debt: 0,
     },
     {
       id: 7,
       fullName: 'Орлова Мария Денисовна',
       room: '509',
       institute: 'ИУБП',
-      course: '3',
+      livingUntil: '2027-07-31',
       phone: '+7 (999) 789-01-23',
-      status: 'Проживает',
+      debt: 0,
     },
     {
       id: 8,
       fullName: 'Федоров Кирилл Андреевич',
       room: '144',
       institute: 'ПИ',
-      course: '1',
+      livingUntil: '2029-07-31',
       phone: '+7 (999) 890-12-34',
-      status: 'Проживает',
+      debt: 0,
     },
     {
       id: 9,
       fullName: 'Соколова Виктория Павловна',
       room: '317',
       institute: 'ИУБП',
-      course: '2',
+      livingUntil: '2027-06-30',
       phone: '+7 (999) 901-23-45',
-      status: 'Выселен',
+      debt: 4350,
     },
     {
       id: 10,
       fullName: 'Никитин Александр Романович',
       room: '602',
       institute: 'ПИ',
-      course: '4',
+      livingUntil: '2027-07-31',
       phone: '+7 (999) 012-34-56',
-      status: 'Проживает',
+      debt: 0,
     },
   ])
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
@@ -157,6 +158,13 @@ const Students = () => {
     setOpen(true)
   }
 
+  const handleDeleteStudent = (id: number) => {
+    setStudents((prev) => prev.filter((student) => student.id !== id))
+    if (paginatedStudents.length - 1 === 0) {
+      setPage(0)
+    }
+  }
+
   const handleSubmitStudent = (data: StudentFormData) => {
     if (selectedStudent) {
       setStudents((prev) =>
@@ -173,7 +181,7 @@ const Students = () => {
       const newStudent: Student = {
         id: Date.now(),
         ...data,
-        status: 'Проживает',
+        debt: 0,
       }
 
       setStudents((prev) => [...prev, newStudent])
@@ -184,6 +192,10 @@ const Students = () => {
 
   const handleClear = () => {
     setSearchItem('')
+  }
+
+  const formatDate = (date: string) => {
+    return new Intl.DateTimeFormat('ru-RU').format(new Date(date))
   }
 
   return (
@@ -250,11 +262,11 @@ const Students = () => {
           <TableHead>
             <TableRow>
               <TableCell>ФИО</TableCell>
-              <TableCell align={'right'}>Комната</TableCell>
-              <TableCell align={'right'}>Институт</TableCell>
-              <TableCell align={'right'}>Курс</TableCell>
-              <TableCell align={'right'}>Телефон</TableCell>
-              <TableCell align={'right'}>Статус</TableCell>
+              <TableCell align={'center'}>Комната</TableCell>
+              <TableCell align={'center'}>Институт</TableCell>
+              <TableCell align={'center'}>Проживает до</TableCell>
+              <TableCell align={'center'}>Телефон</TableCell>
+              <TableCell align={'center'}>Долг</TableCell>
               <TableCell align={'center'}>Действие</TableCell>
             </TableRow>
           </TableHead>
@@ -272,21 +284,26 @@ const Students = () => {
                   }}
                 >
                   <TableCell>{student.fullName}</TableCell>
-                  <TableCell align={'right'}>{student.room}</TableCell>
-                  <TableCell align={'right'}>{student.institute}</TableCell>
-                  <TableCell align={'right'}>{student.course}</TableCell>
-                  <TableCell align={'right'}>{student.phone}</TableCell>
-                  <TableCell align={'right'}>
+                  <TableCell align={'center'}>{student.room}</TableCell>
+                  <TableCell align={'center'}>{student.institute}</TableCell>
+                  <TableCell align={'center'}>
+                    {formatDate(student.livingUntil)}
+                  </TableCell>
+                  <TableCell align={'center'}>{student.phone}</TableCell>
+                  <TableCell align={'center'}>
                     <Chip
-                      label={student.status}
-                      color={
-                        student.status === 'Проживает' ? 'success' : 'error'
-                      }
+                      label={student.debt + ' ₽'}
+                      color={student.debt === 0 ? 'success' : 'error'}
                     />
                   </TableCell>
-                  <TableCell align={'center'}>
+                  <TableCell
+                    sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}
+                  >
                     <IconButton onClick={() => handleEditStudent(student)}>
                       <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => handleDeleteStudent(student.id)}>
+                      <DeleteIcon color={'error'} />
                     </IconButton>
                   </TableCell>
                 </TableRow>

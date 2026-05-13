@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const studentSchema = z.object({
   fullName: z.string().min(3, 'ФИО должно быть минимум 3 символа'),
-  course: z.string().min(1, 'Выберите курс'),
+  livingUntil: z.string().min(1, 'Выберите последний день проживания'),
   room: z.string().min(1, 'Выберите комнату'),
   institute: z.string().min(1, 'Выберите институт'),
   phone: z

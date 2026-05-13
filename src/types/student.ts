@@ -1,18 +1,16 @@
-export type StudentStatus = 'Проживает' | 'Выселен'
-
 export type Student = {
   id: number
   fullName: string
   room: string
   institute: string
-  course: string
+  livingUntil: string
   phone: string
-  status: StudentStatus
+  debt: number
 }
 
 export type StudentFormData = {
   fullName: string
-  course: string
+  livingUntil: string
   room: string
   institute: string
   phone: string
