@@ -6,6 +6,10 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  FormControl, FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
 } from '@mui/material'
 import type { Request, RequestFormData } from '../../types/request.ts'
@@ -44,11 +48,13 @@ const RequestsFormDialog = (props: RequestsFormDialogProps) => {
       reset({
         description: request.description,
         room: request.room,
+        status: request.status
       })
     } else {
       reset({
         description: '',
         room: '',
+        status: 'новое'
       })
     }
   }, [request, reset])
@@ -106,6 +112,31 @@ const RequestsFormDialog = (props: RequestsFormDialogProps) => {
               />
             )}
           />
+
+          {request && (
+            <Controller
+              control={control}
+              name={'status'}
+              render={({ field }) => (
+                <FormControl>
+                  <InputLabel id={'status-select'}>Статус</InputLabel>
+
+                  <Select
+                    id="status-select"
+                    label="Статус"
+                    value={field.value}
+                    onChange={field.onChange}
+                  >
+                    <MenuItem value={'новое'}>новое</MenuItem>
+                    <MenuItem value={'в процессе'}>в процессе</MenuItem>
+                    <MenuItem value={'выполнено'}>выполнено</MenuItem>
+
+                    <FormHelperText>{errors.status?.message}</FormHelperText>
+                  </Select>
+                </FormControl>
+              )}
+            />
+          )}
 
           <Button
             type={'button'}
