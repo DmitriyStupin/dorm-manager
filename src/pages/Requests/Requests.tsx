@@ -5,6 +5,8 @@ import {
   Alert,
   Box,
   Button,
+  Chip,
+  type ChipProps,
   IconButton,
   Table,
   TableBody,
@@ -31,70 +33,70 @@ const Requests = () => {
       description: 'Протекает кран на кухне',
       room: '101',
       createdAt: '2026-05-01',
-      status: 'Новая',
+      status: 'новое',
     },
     {
       id: 2,
       description: 'Не работает розетка',
       room: '203',
       createdAt: '2026-05-02',
-      status: 'В работе',
+      status: 'в процессе',
     },
     {
       id: 3,
       description: 'Скрипит дверь',
       room: '305',
       createdAt: '2026-05-03',
-      status: 'Новая',
+      status: 'новое',
     },
     {
       id: 4,
       description: 'Поломка смесителя в ванной',
       room: '112',
       createdAt: '2026-05-04',
-      status: 'Завершена',
+      status: 'выполнено',
     },
     {
       id: 5,
       description: 'Не горит свет',
       room: '210',
       createdAt: '2026-05-05',
-      status: 'В работе',
+      status: 'в процессе',
     },
     {
       id: 6,
       description: 'Треснула плитка на полу',
       room: '118',
       createdAt: '2026-05-06',
-      status: 'Новая',
+      status: 'новое',
     },
     {
       id: 7,
       description: 'Шумит кондиционер',
       room: '401',
       createdAt: '2026-05-07',
-      status: 'В работе',
+      status: 'в процессе',
     },
     {
       id: 8,
       description: 'Плохо закрывается окно',
       room: '220',
       createdAt: '2026-05-08',
-      status: 'Завершена',
+      status: 'выполнено',
     },
     {
       id: 9,
       description: 'Засор в раковине',
       room: '315',
       createdAt: '2026-05-09',
-      status: 'Новая',
+      status: 'новое',
     },
     {
       id: 10,
       description: 'Отвалилась ручка двери',
       room: '109',
       createdAt: '2026-05-10',
-      status: 'В работе',
+      status: 'в процессе',
     },
   ])
   const [selectedRequest, setSelectedRequest] = useState<Request | null>(null)
@@ -159,7 +161,7 @@ const Requests = () => {
       const newRequest: Request = {
         id: Date.now(),
         ...data,
-        status: 'Новая',
+        status: 'новое',
         createdAt: new Date().toLocaleDateString(),
       }
 
@@ -167,6 +169,12 @@ const Requests = () => {
     }
 
     handleClose()
+  }
+
+  const requestStatusColors: Record<string, ChipProps['color']> = {
+    новое: 'info',
+    'в процессе': 'warning',
+    выполнено: 'success',
   }
 
   return (
@@ -259,7 +267,12 @@ const Requests = () => {
                   <TableCell>{request.description}</TableCell>
                   <TableCell align={'center'}>{request.room}</TableCell>
                   <TableCell align={'center'}>{request.createdAt}</TableCell>
-                  <TableCell align={'center'}>{request.status}</TableCell>
+                  <TableCell align={'center'}>
+                    <Chip
+                      label={request.status}
+                      color={requestStatusColors[request.status]}
+                    />
+                  </TableCell>
                   <TableCell align={'right'}>
                     <IconButton onClick={() => handleEditRequest(request)}>
                       <EditIcon />

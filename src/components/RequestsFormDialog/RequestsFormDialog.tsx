@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import {
+  Autocomplete,
   Box,
   Button,
   Dialog,
@@ -8,7 +9,7 @@ import {
   TextField,
 } from '@mui/material'
 import type { Request, RequestFormData } from '../../types/request.ts'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { type RequestFormDataZod, requestSchema } from '../../request.schema.ts'
 
@@ -18,6 +19,8 @@ type RequestsFormDialogProps = {
   onSubmit: (request: RequestFormData) => void
   request: Request | null
 }
+
+const rooms = ['101', '102', '103', '104', '105', '106', '107']
 
 const RequestsFormDialog = (props: RequestsFormDialogProps) => {
   const { open, handleClose, onSubmit, request } = props
@@ -84,11 +87,24 @@ const RequestsFormDialog = (props: RequestsFormDialogProps) => {
             {...register('description')}
           />
 
-          <TextField
-            label={'Комната'}
-            error={!!errors.room}
-            helperText={errors.room?.message}
-            {...register('room')}
+          <Controller
+            control={control}
+            name={'room'}
+            render={({ field }) => (
+              <Autocomplete
+                options={rooms}
+                value={field.value || null}
+                onChange={(_, value) => field.onChange(value || '')}
+                renderInput={(params) => (
+                  <TextField
+                    error={!!errors.room}
+                    helperText={errors.room?.message}
+                    {...params}
+                    label={'Комната'}
+                  />
+                )}
+              />
+            )}
           />
 
           <Button
