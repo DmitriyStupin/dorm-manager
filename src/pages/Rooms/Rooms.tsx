@@ -9,11 +9,18 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   TextField,
   Typography,
 } from '@mui/material'
 import { roomsInfo } from '../../config/roomsInfo.ts'
 import Paper from '@mui/material/Paper'
+import * as React from 'react'
 
 const rooms = [
   { id: 1, number: '2-01', floor: 2, capacity: 2, occupied: 0 },
@@ -61,11 +68,11 @@ const Rooms = () => {
 
       <Paper sx={{ p: 2 }}>
         <Grid container spacing={2}>
-          <Grid size='grow'>
+          <Grid size="grow">
             <TextField fullWidth label="Поиск комнаты" />
           </Grid>
 
-          <Grid size='grow'>
+          <Grid size="grow">
             <FormControl fullWidth>
               <InputLabel>Статус</InputLabel>
               <Select label={'Статус'}>
@@ -76,11 +83,75 @@ const Rooms = () => {
             </FormControl>
           </Grid>
 
-          <Grid size='grow'>
-            <Button fullWidth sx={{height: '56px'}} variant={'contained'}>Сбросить фильтры</Button>
+          <Grid size="grow">
+            <Button fullWidth sx={{ height: '56px' }} variant={'contained'}>
+              Сбросить фильтры
+            </Button>
           </Grid>
         </Grid>
       </Paper>
+
+      <TableContainer
+        component={Paper}
+        sx={{
+          boxShadow: 'none',
+          border: '1px solid rgba(0, 0, 0, 0.12)',
+          borderRadius: 2,
+        }}
+      >
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Комната</TableCell>
+              <TableCell align={'center'}>Этаж</TableCell>
+              <TableCell align={'center'}>Вместимость</TableCell>
+              <TableCell align={'center'}>Занято</TableCell>
+              <TableCell align={'center'}>Статус</TableCell>
+              <TableCell align={'right'}>Действие</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rooms.map((room) => (
+              <TableRow
+                key={room.id}
+                sx={{
+                  '&:hover': {
+                    backgroundColor: 'rgba(0,0,0,0.05)',
+                    transitionDuration: '0.2s',
+                  },
+                  '&:last-child td, &:last-child th': { border: 0 },
+                }}
+              >
+                <TableCell>{room.number}</TableCell>
+                <TableCell align={'center'}>{room.floor}</TableCell>
+                <TableCell align={'center'}>{room.capacity} места</TableCell>
+                <TableCell align={'center'}>{room.occupied}</TableCell>
+                <TableCell align={'center'}>
+                  <Chip
+                    label={
+                      room.occupied === 0
+                        ? 'свободна'
+                        : room.occupied === room.capacity
+                          ? 'занята'
+                          : 'частично занята'
+                    }
+                    color={
+                      room.occupied === 0
+                        ? 'success'
+                        : room.occupied === room.capacity
+                          ? 'error'
+                          : 'warning'
+                    }
+                  />
+                </TableCell>
+                <TableCell align={'right'}>
+                  <Button variant={'contained'}>Подробнее</Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Box>
   )
 }
