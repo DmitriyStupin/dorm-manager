@@ -30,7 +30,7 @@ const Sidebar = () => {
     {
       title: 'Комнаты',
       icon: <DoorIcon />,
-      path: '/rooms',
+      path: '/roomsInfo',
     },
     {
       title: 'Заявки на ремонт',
