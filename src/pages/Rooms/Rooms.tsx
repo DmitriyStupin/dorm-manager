@@ -22,8 +22,8 @@ import { roomsInfo } from '../../config/roomsInfo.ts'
 import Paper from '@mui/material/Paper'
 import { useState } from 'react'
 import RoomDetailsDialog from '../../components/RoomDetailsDialog/RoomDetailsDialog.tsx'
-import type {Room} from "../../types/room.ts";
-import {getRoomStatus} from "../../utils/getRoomStatus.ts";
+import type { Room } from '../../types/room.ts'
+import { getRoomStatus } from '../../utils/getRoomStatus.ts'
 
 const rooms: Room[] = [
   { id: '1', number: '2-01', floor: 2, capacity: 2, occupied: 0 },
@@ -41,9 +41,26 @@ const rooms: Room[] = [
 
 const Rooms = () => {
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null)
+  const [searchItem, setSearchItem] = useState('')
+  const [statusFilter, setStatusFilter] = useState('')
 
   const handleClose = () => {
     setSelectedRoom(null)
+  }
+
+  const filteredRooms = rooms.filter((room) => {
+    const roomStatus = getRoomStatus(room)
+
+    const matchesSearch = room.number.includes(searchItem)
+
+    const matchesStatus = statusFilter === '' || roomStatus.color === statusFilter
+
+    return matchesSearch && matchesStatus
+  })
+
+  const handleResetFilters = () => {
+    setSearchItem('')
+    setStatusFilter('')
   }
 
   return (
@@ -92,16 +109,29 @@ const Rooms = () => {
       >
         <Grid container spacing={2}>
           <Grid size="grow">
-            <TextField fullWidth label="Поиск комнаты" />
+            <TextField
+              fullWidth
+              label="Поиск комнаты"
+              value={searchItem}
+              onChange={(event) => {
+                setSearchItem(event.target.value)
+              }}
+            />
           </Grid>
 
           <Grid size="grow">
             <FormControl fullWidth>
               <InputLabel>Статус</InputLabel>
-              <Select label={'Статус'}>
-                <MenuItem>Свободно</MenuItem>
-                <MenuItem>Частично заняты</MenuItem>
-                <MenuItem>Полностью заняты</MenuItem>
+              <Select
+                label={'Статус'}
+                value={statusFilter}
+                onChange={(event) => {
+                  setStatusFilter(event.target.value)
+                }}
+              >
+                <MenuItem value={'success'}>Свободно</MenuItem>
+                <MenuItem value={'warning'}>Частично заняты</MenuItem>
+                <MenuItem value={'error'}>Полностью заняты</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -112,6 +142,7 @@ const Rooms = () => {
               sx={{ height: '56px' }}
               variant={'outlined'}
               color={'error'}
+              onClick={handleResetFilters}
             >
               Сбросить фильтры
             </Button>
@@ -139,7 +170,7 @@ const Rooms = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rooms.map((room) => (
+            {filteredRooms.map((room) => (
               <TableRow
                 key={room.id}
                 sx={{
