@@ -14,18 +14,25 @@ import {
   Typography,
 } from '@mui/material'
 import InfoItem from '../InfoItem/InfoItem.tsx'
+import type { Room } from '../../types/room.ts'
+import { getRoomStatus } from '../../utils/getRoomStatus.ts'
 
 type RoomDetailsDialogProps = {
   isOpen: boolean
   handleClose: () => void
+  room: Room | null
 }
 
 const RoomDetailsDialog = (props: RoomDetailsDialogProps) => {
-  const { isOpen, handleClose } = props
+  const { isOpen, handleClose, room } = props
+
+  const roomStatus = getRoomStatus(room)
+
+  if (!room) return null
 
   return (
     <Dialog fullWidth maxWidth="sm" open={isOpen} onClose={handleClose}>
-      <DialogTitle>Комната 16-49</DialogTitle>
+      <DialogTitle>Комната {room.number}</DialogTitle>
       <DialogContent>
         <Stack spacing={3}>
           <Box
@@ -38,16 +45,19 @@ const RoomDetailsDialog = (props: RoomDetailsDialogProps) => {
               gap: 3,
             }}
           >
-            <InfoItem label={'Этаж'} value={'16'} />
-            <InfoItem label={'Вместимость'} value={'2 места'} />
-            <InfoItem label={'Занято'} value={'2 из 2 мест'} />
+            <InfoItem label={'Этаж'} value={room?.floor} />
+            <InfoItem label={'Вместимость'} value={room.capacity} />
+            <InfoItem
+              label={'Занято'}
+              value={`${room.occupied} из ${room.capacity} мест`}
+            />
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant={'subtitle1'} color={'textSecondary'}>
                 Статус
               </Typography>
 
               <Box>
-                <Chip label="занята" color="error" />
+                <Chip label={roomStatus.label} color={roomStatus.color} />
               </Box>
             </Box>
           </Box>
@@ -60,10 +70,10 @@ const RoomDetailsDialog = (props: RoomDetailsDialogProps) => {
               <ListItem
                 sx={{ display: 'flex', justifyContent: 'space-between', p: 0 }}
               >
-                  <ListItemText
-                    primary={'Ступин Дмитрий Андреевич'}
-                    secondary={`ИКИТ · проживает до 08.08.2027 · 89964278036`}
-                  />
+                <ListItemText
+                  primary={'Ступин Дмитрий Андреевич'}
+                  secondary={`ИКИТ · проживает до 08.08.2027 · 89964278036`}
+                />
                 <Chip label={'0 ₽'} color={'success'} />
               </ListItem>
             </List>
@@ -71,7 +81,13 @@ const RoomDetailsDialog = (props: RoomDetailsDialogProps) => {
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} variant="outlined" color={'error'}>
+        <Button
+          fullWidth
+          onClick={handleClose}
+          variant="outlined"
+          color={'error'}
+          sx={{ marginInline: 1.5 }}
+        >
           Закрыть
         </Button>
       </DialogActions>

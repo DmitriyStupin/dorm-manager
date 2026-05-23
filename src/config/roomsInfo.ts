@@ -19,4 +19,4 @@ export const roomsInfo = [
     value: 161,
     color: 'error',
   },
-]
+] as const

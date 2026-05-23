@@ -20,33 +20,30 @@ import {
 } from '@mui/material'
 import { roomsInfo } from '../../config/roomsInfo.ts'
 import Paper from '@mui/material/Paper'
-import {useState} from "react";
-import RoomDetailsDialog
-  from "../../components/RoomDetailsDialog/RoomDetailsDialog.tsx";
+import { useState } from 'react'
+import RoomDetailsDialog from '../../components/RoomDetailsDialog/RoomDetailsDialog.tsx'
+import type {Room} from "../../types/room.ts";
+import {getRoomStatus} from "../../utils/getRoomStatus.ts";
 
-const rooms = [
-  { id: 1, number: '2-01', floor: 2, capacity: 2, occupied: 0 },
-  { id: 2, number: '2-02', floor: 2, capacity: 3, occupied: 1 },
-  { id: 3, number: '2-03', floor: 2, capacity: 2, occupied: 2 },
-  { id: 4, number: '2-04', floor: 2, capacity: 4, occupied: 1 },
-  { id: 5, number: '2-05', floor: 2, capacity: 1, occupied: 0 },
+const rooms: Room[] = [
+  { id: '1', number: '2-01', floor: 2, capacity: 2, occupied: 0 },
+  { id: '2', number: '2-02', floor: 2, capacity: 3, occupied: 1 },
+  { id: '3', number: '2-03', floor: 2, capacity: 2, occupied: 2 },
+  { id: '4', number: '2-04', floor: 2, capacity: 4, occupied: 1 },
+  { id: '5', number: '2-05', floor: 2, capacity: 1, occupied: 0 },
 
-  { id: 6, number: '3-01', floor: 3, capacity: 2, occupied: 2 },
-  { id: 7, number: '3-02', floor: 3, capacity: 3, occupied: 0 },
-  { id: 8, number: '3-03', floor: 3, capacity: 2, occupied: 1 },
-  { id: 9, number: '3-04', floor: 3, capacity: 4, occupied: 4 },
-  { id: 10, number: '3-05', floor: 3, capacity: 2, occupied: 0 },
+  { id: '6', number: '3-01', floor: 3, capacity: 2, occupied: 2 },
+  { id: '7', number: '3-02', floor: 3, capacity: 3, occupied: 0 },
+  { id: '8', number: '3-03', floor: 3, capacity: 2, occupied: 1 },
+  { id: '9', number: '3-04', floor: 3, capacity: 4, occupied: 4 },
+  { id: '10', number: '3-05', floor: 3, capacity: 2, occupied: 0 },
 ]
 
 const Rooms = () => {
-  const [open, setOpen] = useState(false)
-
-  const handleClickOpen = () => {
-    setOpen(true)
-  }
+  const [selectedRoom, setSelectedRoom] = useState<Room | null>(null)
 
   const handleClose = () => {
-    setOpen(false)
+    setSelectedRoom(null)
   }
 
   return (
@@ -61,7 +58,14 @@ const Rooms = () => {
         }}
       >
         {roomsInfo.map((roomInfo) => (
-          <Card key={roomInfo.title}>
+          <Card
+            sx={{
+              boxShadow: 'none',
+              border: '1px solid rgba(0, 0, 0, 0.12)',
+              borderRadius: 2,
+            }}
+            key={roomInfo.title}
+          >
             <CardContent
               sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
             >
@@ -78,7 +82,14 @@ const Rooms = () => {
         ))}
       </Box>
 
-      <Paper sx={{ p: 2 }}>
+      <Paper
+        sx={{
+          p: 2,
+          boxShadow: 'none',
+          border: '1px solid rgba(0, 0, 0, 0.12)',
+          borderRadius: 2,
+        }}
+      >
         <Grid container spacing={2}>
           <Grid size="grow">
             <TextField fullWidth label="Поиск комнаты" />
@@ -96,7 +107,12 @@ const Rooms = () => {
           </Grid>
 
           <Grid size="grow">
-            <Button fullWidth sx={{ height: '56px' }} variant={'outlined'} color={'error'}>
+            <Button
+              fullWidth
+              sx={{ height: '56px' }}
+              variant={'outlined'}
+              color={'error'}
+            >
               Сбросить фильтры
             </Button>
           </Grid>
@@ -140,31 +156,30 @@ const Rooms = () => {
                 <TableCell align={'center'}>{room.occupied}</TableCell>
                 <TableCell align={'center'}>
                   <Chip
-                    label={
-                      room.occupied === 0
-                        ? 'свободна'
-                        : room.occupied === room.capacity
-                          ? 'занята'
-                          : 'частично занята'
-                    }
-                    color={
-                      room.occupied === 0
-                        ? 'success'
-                        : room.occupied === room.capacity
-                          ? 'error'
-                          : 'warning'
-                    }
+                    label={getRoomStatus(room).label}
+                    color={getRoomStatus(room).color}
                   />
                 </TableCell>
                 <TableCell align={'right'}>
-                  <Button variant={'contained'} onClick={handleClickOpen}>Подробнее</Button>
-                  <RoomDetailsDialog isOpen={open} handleClose={handleClose} />
+                  <Button
+                    variant={'contained'}
+                    onClick={() => {
+                      setSelectedRoom(room)
+                    }}
+                  >
+                    Подробнее
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <RoomDetailsDialog
+        isOpen={Boolean(selectedRoom)}
+        handleClose={handleClose}
+        room={selectedRoom}
+      />
     </Box>
   )
 }
