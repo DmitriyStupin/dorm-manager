@@ -20,6 +20,9 @@ import {
 } from '@mui/material'
 import { roomsInfo } from '../../config/roomsInfo.ts'
 import Paper from '@mui/material/Paper'
+import {useState} from "react";
+import RoomDetailsDialog
+  from "../../components/RoomDetailsDialog/RoomDetailsDialog.tsx";
 
 const rooms = [
   { id: 1, number: '2-01', floor: 2, capacity: 2, occupied: 0 },
@@ -36,6 +39,16 @@ const rooms = [
 ]
 
 const Rooms = () => {
+  const [open, setOpen] = useState(false)
+
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <Box
@@ -83,7 +96,7 @@ const Rooms = () => {
           </Grid>
 
           <Grid size="grow">
-            <Button fullWidth sx={{ height: '56px' }} variant={'contained'}>
+            <Button fullWidth sx={{ height: '56px' }} variant={'outlined'} color={'error'}>
               Сбросить фильтры
             </Button>
           </Grid>
@@ -144,7 +157,8 @@ const Rooms = () => {
                   />
                 </TableCell>
                 <TableCell align={'right'}>
-                  <Button variant={'contained'}>Подробнее</Button>
+                  <Button variant={'contained'} onClick={handleClickOpen}>Подробнее</Button>
+                  <RoomDetailsDialog isOpen={open} handleClose={handleClose} />
                 </TableCell>
               </TableRow>
             ))}
