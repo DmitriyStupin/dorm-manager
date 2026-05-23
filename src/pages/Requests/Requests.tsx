@@ -150,6 +150,10 @@ const Requests = () => {
     }
   }
 
+  const formatDate = (date: string) => {
+    return new Intl.DateTimeFormat('ru-RU').format(new Date(date))
+  }
+
   const handleSubmitRequest = (data: RequestFormData) => {
     if (selectedRequest) {
       setRequests((prev) =>
@@ -162,7 +166,7 @@ const Requests = () => {
         id: Date.now(),
         ...data,
         status: 'новое',
-        createdAt: new Date().toLocaleDateString(),
+        createdAt: new Date().toISOString().split('T')[0],
       }
 
       setRequests((prev) => [...prev, newRequest])
@@ -176,6 +180,8 @@ const Requests = () => {
     'в процессе': 'warning',
     выполнено: 'success',
   }
+
+
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -266,7 +272,7 @@ const Requests = () => {
                   <TableCell>#{request.id}</TableCell>
                   <TableCell>{request.description}</TableCell>
                   <TableCell align={'center'}>{request.room}</TableCell>
-                  <TableCell align={'center'}>{request.createdAt}</TableCell>
+                  <TableCell align={'center'}>{formatDate(request.createdAt)}</TableCell>
                   <TableCell align={'center'}>
                     <Chip
                       label={request.status}

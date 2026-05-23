@@ -20,7 +20,6 @@ import {
 } from '@mui/material'
 import { roomsInfo } from '../../config/roomsInfo.ts'
 import Paper from '@mui/material/Paper'
-import * as React from 'react'
 
 const rooms = [
   { id: 1, number: '2-01', floor: 2, capacity: 2, occupied: 0 },
