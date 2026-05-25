@@ -1,12 +1,14 @@
+export type RequestStatus = 'новое' | 'в процессе' | 'выполнено'
+
 export type Request = {
   id: number
   description: string
-  room: string
+  roomId: string
   createdAt: string
-  status: string
+  status: RequestStatus
 }
 
 export type RequestFormData = {
   description: string
-  room: string
+  roomId: string
 }

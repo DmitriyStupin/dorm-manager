@@ -25,80 +25,11 @@ import * as React from 'react'
 import { useState } from 'react'
 import RequestsFormDialog from '../../components/RequestsFormDialog/RequestsFormDialog.tsx'
 import type { Request, RequestFormData } from '../../types/request.ts'
+import { requests as mockRequests } from '../../mocks/requests.ts'
+import { rooms } from '../../mocks/rooms.ts'
 
 const Requests = () => {
-  const [requests, setRequests] = useState([
-    {
-      id: 1,
-      description: 'Протекает кран на кухне',
-      room: '101',
-      createdAt: '2026-05-01',
-      status: 'новое',
-    },
-    {
-      id: 2,
-      description: 'Не работает розетка',
-      room: '203',
-      createdAt: '2026-05-02',
-      status: 'в процессе',
-    },
-    {
-      id: 3,
-      description: 'Скрипит дверь',
-      room: '305',
-      createdAt: '2026-05-03',
-      status: 'новое',
-    },
-    {
-      id: 4,
-      description: 'Поломка смесителя в ванной',
-      room: '112',
-      createdAt: '2026-05-04',
-      status: 'выполнено',
-    },
-    {
-      id: 5,
-      description: 'Не горит свет',
-      room: '210',
-      createdAt: '2026-05-05',
-      status: 'в процессе',
-    },
-    {
-      id: 6,
-      description: 'Треснула плитка на полу',
-      room: '118',
-      createdAt: '2026-05-06',
-      status: 'новое',
-    },
-    {
-      id: 7,
-      description: 'Шумит кондиционер',
-      room: '401',
-      createdAt: '2026-05-07',
-      status: 'в процессе',
-    },
-    {
-      id: 8,
-      description: 'Плохо закрывается окно',
-      room: '220',
-      createdAt: '2026-05-08',
-      status: 'выполнено',
-    },
-    {
-      id: 9,
-      description: 'Засор в раковине',
-      room: '315',
-      createdAt: '2026-05-09',
-      status: 'новое',
-    },
-    {
-      id: 10,
-      description: 'Отвалилась ручка двери',
-      room: '109',
-      createdAt: '2026-05-10',
-      status: 'в процессе',
-    },
-  ])
+  const [requests, setRequests] = useState<Request[]>(mockRequests)
   const [selectedRequest, setSelectedRequest] = useState<Request | null>(null)
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
@@ -258,7 +189,10 @@ const Requests = () => {
 
           <TableBody>
             {paginatedRepairRequests.length > 0 ? (
-              paginatedRepairRequests.map((request) => (
+              paginatedRepairRequests.map((request) => {
+                const room = rooms.find((room) => room.id === request.roomId)
+
+              return (
                 <TableRow
                   key={request.id}
                   sx={{
@@ -271,7 +205,7 @@ const Requests = () => {
                 >
                   <TableCell>#{request.id}</TableCell>
                   <TableCell>{request.description}</TableCell>
-                  <TableCell align={'center'}>{request.room}</TableCell>
+                  <TableCell align={'center'}>{room?.number}</TableCell>
                   <TableCell align={'center'}>{formatDate(request.createdAt)}</TableCell>
                   <TableCell align={'center'}>
                     <Chip
@@ -288,7 +222,7 @@ const Requests = () => {
                     </IconButton>
                   </TableCell>
                 </TableRow>
-              ))
+              )})
             ) : (
               <TableRow>
                 <TableCell colSpan={6}>

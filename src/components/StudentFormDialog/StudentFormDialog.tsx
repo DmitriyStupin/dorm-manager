@@ -17,6 +17,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { studentSchema } from '../../student.schema.ts'
 import {useEffect} from "react";
+import { rooms } from '../../mocks/rooms.ts'
 
 type StudentFormDialogProps = {
   open: boolean
@@ -24,8 +25,6 @@ type StudentFormDialogProps = {
   onSubmit: (student: StudentFormData) => void
   student: Student | null
 }
-
-const rooms = ['101', '102', '103', '104', '105', '106', '107']
 
 const StudentFormDialog = (props: StudentFormDialogProps) => {
   const { open, handleClose, onSubmit, student } = props
@@ -41,7 +40,7 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
     defaultValues: {
       fullName: '',
       livingUntil: '',
-      room: '',
+      roomId: '',
       institute: '',
       phone: '',
     },
@@ -52,7 +51,7 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
       reset({
         fullName: student.fullName,
         livingUntil: student.livingUntil,
-        room: student.room,
+        roomId: student.roomId,
         institute: student.institute,
         phone: student.phone,
       })
@@ -60,7 +59,7 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
       reset({
         fullName: '',
         livingUntil: '',
-        room: '',
+        roomId: '',
         institute: '',
         phone: '',
       })
@@ -82,7 +81,9 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
         reset()
       }}
     >
-      <DialogTitle>Добавить студента</DialogTitle>
+      <DialogTitle>
+        {student ? 'Редактировать' : 'Добавить студента'}
+      </DialogTitle>
 
       <DialogContent sx={{ px: 3, pt: 2 }}>
         <Box
@@ -116,16 +117,18 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
 
           <Controller
             control={control}
-            name={'room'}
+            name={'roomId'}
             render={({ field }) => (
               <Autocomplete
                 options={rooms}
-                value={field.value || null}
-                onChange={(_, value) => field.onChange(value || '')}
+                getOptionLabel={(option) => option.number}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                value={rooms.find((room) => room.id === field.value) || null}
+                onChange={(_, value) => field.onChange(value?.id || '')}
                 renderInput={(params) => (
                   <TextField
-                    error={!!errors.room}
-                    helperText={errors.room?.message}
+                    error={!!errors.roomId}
+                    helperText={errors.roomId?.message}
                     {...params}
                     label={'Комната'}
                   />

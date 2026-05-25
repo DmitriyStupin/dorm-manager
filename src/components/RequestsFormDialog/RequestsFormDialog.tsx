@@ -16,6 +16,7 @@ import type { Request, RequestFormData } from '../../types/request.ts'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { type RequestFormDataZod, requestSchema } from '../../request.schema.ts'
+import { rooms } from '../../mocks/rooms.ts'
 
 type RequestsFormDialogProps = {
   open: boolean
@@ -23,8 +24,6 @@ type RequestsFormDialogProps = {
   onSubmit: (request: RequestFormData) => void
   request: Request | null
 }
-
-const rooms = ['101', '102', '103', '104', '105', '106', '107']
 
 const RequestsFormDialog = (props: RequestsFormDialogProps) => {
   const { open, handleClose, onSubmit, request } = props
@@ -39,7 +38,8 @@ const RequestsFormDialog = (props: RequestsFormDialogProps) => {
     resolver: zodResolver(requestSchema),
     defaultValues: {
       description: '',
-      room: '',
+      roomId: '',
+      status: 'новое',
     },
   })
 
@@ -47,13 +47,13 @@ const RequestsFormDialog = (props: RequestsFormDialogProps) => {
     if (request) {
       reset({
         description: request.description,
-        room: request.room,
+        roomId: request.roomId,
         status: request.status
       })
     } else {
       reset({
         description: '',
-        room: '',
+        roomId: '',
         status: 'новое'
       })
     }
@@ -95,18 +95,19 @@ const RequestsFormDialog = (props: RequestsFormDialogProps) => {
 
           <Controller
             control={control}
-            name={'room'}
-            render={({ field }) => (
+            name="roomId"
+            render={({ field }) => (  
               <Autocomplete
                 options={rooms}
-                value={field.value || null}
-                onChange={(_, value) => field.onChange(value || '')}
+                getOptionLabel={(room) => room.number}
+                value={rooms.find((room) => room.id === field.value) || null}
+                onChange={(_, value) => field.onChange(value?.id || '')}
                 renderInput={(params) => (
                   <TextField
-                    error={!!errors.room}
-                    helperText={errors.room?.message}
                     {...params}
-                    label={'Комната'}
+                    label="Комната"
+                    error={!!errors.roomId}
+                    helperText={errors.roomId?.message}
                   />
                 )}
               />

@@ -24,100 +24,11 @@ import * as React from 'react'
 import { useState } from 'react'
 import StudentFormDialog from '../../components/StudentFormDialog/StudentFormDialog.tsx'
 import type { Student, StudentFormData } from '../../types/student.ts'
+import { students as mockStudents } from '../../mocks/students.ts'
+import {rooms} from "../../mocks/rooms.ts";
 
 const Students = () => {
-  const [students, setStudents] = useState<Student[]>([
-    {
-      id: 1,
-      fullName: 'Иванов Иван Иванович',
-      room: '101',
-      institute: 'ИКИТ',
-      livingUntil: '2026-05-08',
-      phone: '+7 (999) 123-45-67',
-      debt: 0,
-    },
-    {
-      id: 2,
-      fullName: 'Петров Петр Сергеевич',
-      room: '203',
-      institute: 'ПИ',
-      livingUntil: '2027-07-31',
-      phone: '+7 (999) 234-56-78',
-      debt: 0,
-    },
-    {
-      id: 3,
-      fullName: 'Сидорова Анна Викторовна',
-      room: '305',
-      institute: 'ИКИТ',
-      livingUntil: '2028-07-31',
-      phone: '+7 (999) 345-67-89',
-      debt: 4350,
-    },
-    {
-      id: 4,
-      fullName: 'Кузнецов Дмитрий Олегович',
-      room: '412',
-      institute: 'ИКИТ',
-      livingUntil: '2026-07-31',
-      phone: '+7 (999) 456-78-90',
-      debt: 0,
-    },
-    {
-      id: 5,
-      fullName: 'Морозова Екатерина Ильинична',
-      room: '118',
-      institute: 'ИКИТ',
-      livingUntil: '2026-08-15',
-      phone: '+7 (999) 567-89-01',
-      debt: 0,
-    },
-    {
-      id: 6,
-      fullName: 'Васильев Артем Николаевич',
-      room: '221',
-      institute: 'ПИ',
-      livingUntil: '2026-07-31',
-      phone: '+7 (999) 678-90-12',
-      debt: 0,
-    },
-    {
-      id: 7,
-      fullName: 'Орлова Мария Денисовна',
-      room: '509',
-      institute: 'ИУБП',
-      livingUntil: '2027-07-31',
-      phone: '+7 (999) 789-01-23',
-      debt: 0,
-    },
-    {
-      id: 8,
-      fullName: 'Федоров Кирилл Андреевич',
-      room: '144',
-      institute: 'ПИ',
-      livingUntil: '2029-07-31',
-      phone: '+7 (999) 890-12-34',
-      debt: 0,
-    },
-    {
-      id: 9,
-      fullName: 'Соколова Виктория Павловна',
-      room: '317',
-      institute: 'ИУБП',
-      livingUntil: '2027-06-30',
-      phone: '+7 (999) 901-23-45',
-      debt: 4350,
-    },
-    {
-      id: 10,
-      fullName: 'Никитин Александр Романович',
-      room: '602',
-      institute: 'ПИ',
-      livingUntil: '2027-07-31',
-      phone: '+7 (999) 012-34-56',
-      debt: 0,
-    },
-  ])
+  const [students, setStudents] = useState<Student[]>(mockStudents)
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
@@ -283,7 +194,11 @@ const Students = () => {
                   }}
                 >
                   <TableCell>{student.fullName}</TableCell>
-                  <TableCell align={'center'}>{student.room}</TableCell>
+                  <TableCell align={'center'}>
+                    {
+                      rooms.find((room) => room.id === student.roomId)?.number
+                    }
+                  </TableCell>
                   <TableCell align={'center'}>{student.institute}</TableCell>
                   <TableCell align={'center'}>
                     {formatDate(student.livingUntil)}
