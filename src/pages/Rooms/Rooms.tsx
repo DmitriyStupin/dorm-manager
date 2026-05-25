@@ -18,7 +18,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { roomsInfo } from '../../config/roomsInfo.ts'
 import Paper from '@mui/material/Paper'
 import { useState } from 'react'
 import RoomDetailsDialog from '../../components/RoomDetailsDialog/RoomDetailsDialog.tsx'
@@ -27,11 +26,14 @@ import { getRoomStatus } from '../../utils/getRoomStatus.ts'
 import { rooms } from '../../mocks/rooms.ts'
 import { students } from '../../mocks/students.ts'
 import { getRoomOccupied } from '../../utils/getRoomOccupied.ts'
+import {getRoomsStats} from "../../utils/getRoomsStats.ts";
 
 const Rooms = () => {
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null)
   const [searchItem, setSearchItem] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
+
+  const stats = getRoomsStats(rooms, students)
 
   const handleClose = () => {
     setSelectedRoom(null)
@@ -66,25 +68,25 @@ const Rooms = () => {
           gap: 2,
         }}
       >
-        {roomsInfo.map((roomInfo) => (
+        {stats.map((stat) => (
           <Card
             sx={{
               boxShadow: 'none',
               border: '1px solid rgba(0, 0, 0, 0.12)',
               borderRadius: 2,
             }}
-            key={roomInfo.title}
+            key={stat.title}
           >
             <CardContent
               sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
             >
               <Chip
                 sx={{ alignSelf: 'flex-start' }}
-                label={roomInfo.title}
-                color={roomInfo.color}
+                label={stat.title}
+                color={stat.color}
               />
               <Typography sx={{ fontWeight: 700 }} variant={'h5'}>
-                {roomInfo.value}
+                {stat.value}
               </Typography>
             </CardContent>
           </Card>
@@ -166,38 +168,36 @@ const Rooms = () => {
               const occupied = getRoomOccupied(room.id, students)
               const roomStatus = getRoomStatus(room.capacity, occupied)
 
-            return (
-              <TableRow
-                key={room.id}
-                sx={{
-                  '&:hover': {
-                    backgroundColor: 'rgba(0,0,0,0.05)',
-                    transitionDuration: '0.2s',
-                  },
-                  '&:last-child td, &:last-child th': { border: 0 },
-                }}
-              >
-                <TableCell>{room.number}</TableCell>
-                <TableCell align={'center'}>{room.floor}</TableCell>
-                <TableCell align={'center'}>{room.capacity} места</TableCell>
-                <TableCell align={'center'}>{occupied}</TableCell>
-                <TableCell align={'center'}>
-                  <Chip
-                    label={roomStatus.label}
-                    color={roomStatus.color}
-                  />
-                </TableCell>
-                <TableCell align={'right'}>
-                  <Button
-                    variant={'contained'}
-                    onClick={() => {
-                      setSelectedRoom(room)
-                    }}
-                  >
-                    Подробнее
-                  </Button>
-                </TableCell>
-              </TableRow>)
+              return (
+                <TableRow
+                  key={room.id}
+                  sx={{
+                    '&:hover': {
+                      backgroundColor: 'rgba(0,0,0,0.05)',
+                      transitionDuration: '0.2s',
+                    },
+                    '&:last-child td, &:last-child th': { border: 0 },
+                  }}
+                >
+                  <TableCell>{room.number}</TableCell>
+                  <TableCell align={'center'}>{room.floor}</TableCell>
+                  <TableCell align={'center'}>{room.capacity} места</TableCell>
+                  <TableCell align={'center'}>{occupied}</TableCell>
+                  <TableCell align={'center'}>
+                    <Chip label={roomStatus.label} color={roomStatus.color} />
+                  </TableCell>
+                  <TableCell align={'right'}>
+                    <Button
+                      variant={'contained'}
+                      onClick={() => {
+                        setSelectedRoom(room)
+                      }}
+                    >
+                      Подробнее
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              )
             })}
           </TableBody>
         </Table>

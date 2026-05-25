@@ -1,7 +1,9 @@
+import { rooms } from '../mocks/rooms.ts'
+
 export const roomsInfo = [
   {
     title: 'Всего комнат',
-    value: 735,
+    value: rooms.length,
     color: 'info',
   },
   {
