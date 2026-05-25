@@ -1,7 +1,7 @@
 export type Student = {
   id: number
   fullName: string
-  room: string
+  roomId: string
   institute: string
   livingUntil: string
   phone: string
@@ -11,7 +11,7 @@ export type Student = {
 export type StudentFormData = {
   fullName: string
   livingUntil: string
-  room: string
+  roomId: string
   institute: string
   phone: string
 }

@@ -16,6 +16,8 @@ import {
 import InfoItem from '../InfoItem/InfoItem.tsx'
 import type { Room } from '../../types/room.ts'
 import { getRoomStatus } from '../../utils/getRoomStatus.ts'
+import { students } from '../../mocks/students.ts'
+import {getRoomOccupied} from "../../utils/getRoomOccupied.ts";
 
 type RoomDetailsDialogProps = {
   isOpen: boolean
@@ -25,10 +27,15 @@ type RoomDetailsDialogProps = {
 
 const RoomDetailsDialog = (props: RoomDetailsDialogProps) => {
   const { isOpen, handleClose, room } = props
-
-  const roomStatus = getRoomStatus(room)
-
+  
   if (!room) return null
+
+  const roomStudents = students.filter((student) => student.roomId === room?.id)
+
+  const occupied = getRoomOccupied(room.id, students)
+
+  const roomStatus = getRoomStatus(room?.capacity, occupied)
+
 
   return (
     <Dialog fullWidth maxWidth="sm" open={isOpen} onClose={handleClose}>
@@ -49,7 +56,7 @@ const RoomDetailsDialog = (props: RoomDetailsDialogProps) => {
             <InfoItem label={'Вместимость'} value={room.capacity} />
             <InfoItem
               label={'Занято'}
-              value={`${room.occupied} из ${room.capacity} мест`}
+              value={`${occupied} из ${room.capacity} мест`}
             />
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               <Typography variant={'subtitle1'} color={'textSecondary'}>
@@ -67,15 +74,37 @@ const RoomDetailsDialog = (props: RoomDetailsDialogProps) => {
               Проживающие
             </Typography>
             <List>
-              <ListItem
-                sx={{ display: 'flex', justifyContent: 'space-between', p: 0 }}
-              >
-                <ListItemText
-                  primary={'Ступин Дмитрий Андреевич'}
-                  secondary={`ИКИТ · проживает до 08.08.2027 · 89964278036`}
-                />
-                <Chip label={'0 ₽'} color={'success'} />
-              </ListItem>
+              {roomStudents.length > 0 ? (
+                roomStudents.map((roomStudent) => (
+                  <ListItem
+                    key={roomStudent.id}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      p: 0,
+                    }}
+                  >
+                    <ListItemText
+                      primary={roomStudent.fullName}
+                      secondary={`${roomStudent.institute} · проживает до ${new Intl.DateTimeFormat(
+                        'ru-RU',
+                      ).format(
+                        new Date(roomStudent.livingUntil),
+                      )} · ${roomStudent.phone}`}
+                    />
+
+                    <Chip
+                      label={`${roomStudent.debt} ₽`}
+                      color={roomStudent.debt === 0 ? 'success' : 'error'}
+                    />
+                  </ListItem>
+                ))
+              ) : (
+                <Typography color="text.secondary">
+                  В комнате никто не проживает
+                </Typography>
+              )}
             </List>
           </Box>
         </Stack>

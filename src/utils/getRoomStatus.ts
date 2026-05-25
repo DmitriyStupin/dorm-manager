@@ -1,10 +1,8 @@
-import type { Room } from '../types/room.ts'
-
-export const getRoomStatus = (room: Room | null) => {
-  if (room?.occupied === 0) {
+export const getRoomStatus = (capacity: number, occupied: number) => {
+  if (occupied === 0) {
     return { label: 'свободна', color: 'success' as const }
   }
-  if (room?.occupied === room?.capacity) {
+  if (occupied === capacity) {
     return { label: 'занята', color: 'error' as const }
   }
   return { label: 'частично занята', color: 'warning' as const }

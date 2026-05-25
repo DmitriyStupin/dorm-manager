@@ -24,20 +24,9 @@ import { useState } from 'react'
 import RoomDetailsDialog from '../../components/RoomDetailsDialog/RoomDetailsDialog.tsx'
 import type { Room } from '../../types/room.ts'
 import { getRoomStatus } from '../../utils/getRoomStatus.ts'
-
-const rooms: Room[] = [
-  { id: '1', number: '2-01', floor: 2, capacity: 2, occupied: 0 },
-  { id: '2', number: '2-02', floor: 2, capacity: 3, occupied: 1 },
-  { id: '3', number: '2-03', floor: 2, capacity: 2, occupied: 2 },
-  { id: '4', number: '2-04', floor: 2, capacity: 4, occupied: 1 },
-  { id: '5', number: '2-05', floor: 2, capacity: 1, occupied: 0 },
-
-  { id: '6', number: '3-01', floor: 3, capacity: 2, occupied: 2 },
-  { id: '7', number: '3-02', floor: 3, capacity: 3, occupied: 0 },
-  { id: '8', number: '3-03', floor: 3, capacity: 2, occupied: 1 },
-  { id: '9', number: '3-04', floor: 3, capacity: 4, occupied: 4 },
-  { id: '10', number: '3-05', floor: 3, capacity: 2, occupied: 0 },
-]
+import { rooms } from '../../mocks/rooms.ts'
+import { students } from '../../mocks/students.ts'
+import { getRoomOccupied } from '../../utils/getRoomOccupied.ts'
 
 const Rooms = () => {
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null)
@@ -49,11 +38,14 @@ const Rooms = () => {
   }
 
   const filteredRooms = rooms.filter((room) => {
-    const roomStatus = getRoomStatus(room)
+    const occupied = getRoomOccupied(room.id, students)
 
-    const matchesSearch = room.number.includes(searchItem)
+    const roomStatus = getRoomStatus(room.capacity, occupied)
 
-    const matchesStatus = statusFilter === '' || roomStatus.color === statusFilter
+    const matchesSearch = room.number.toLowerCase().includes(searchItem)
+
+    const matchesStatus =
+      statusFilter === '' || roomStatus.color === statusFilter
 
     return matchesSearch && matchesStatus
   })
@@ -170,7 +162,11 @@ const Rooms = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredRooms.map((room) => (
+            {filteredRooms.map((room) => {
+              const occupied = getRoomOccupied(room.id, students)
+              const roomStatus = getRoomStatus(room.capacity, occupied)
+
+            return (
               <TableRow
                 key={room.id}
                 sx={{
@@ -184,11 +180,11 @@ const Rooms = () => {
                 <TableCell>{room.number}</TableCell>
                 <TableCell align={'center'}>{room.floor}</TableCell>
                 <TableCell align={'center'}>{room.capacity} места</TableCell>
-                <TableCell align={'center'}>{room.occupied}</TableCell>
+                <TableCell align={'center'}>{occupied}</TableCell>
                 <TableCell align={'center'}>
                   <Chip
-                    label={getRoomStatus(room).label}
-                    color={getRoomStatus(room).color}
+                    label={roomStatus.label}
+                    color={roomStatus.color}
                   />
                 </TableCell>
                 <TableCell align={'right'}>
@@ -201,8 +197,8 @@ const Rooms = () => {
                     Подробнее
                   </Button>
                 </TableCell>
-              </TableRow>
-            ))}
+              </TableRow>)
+            })}
           </TableBody>
         </Table>
       </TableContainer>

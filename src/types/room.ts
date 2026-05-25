@@ -3,5 +3,4 @@ export type Room = {
   number: string
   floor: number
   capacity: number
-  occupied: number
 }
