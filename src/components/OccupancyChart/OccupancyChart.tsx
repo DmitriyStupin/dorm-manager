@@ -4,8 +4,8 @@ import { cardsInfo } from '../../config/dormInfo.tsx'
 
 const OccupancyChart = () => {
   const occupancyChartData = [
-    { label: 'Занято комнат', value: cardsInfo[1].value, color: 'red' },
-    { label: 'Свободно комнат', value: cardsInfo[2].value, color: 'green' },
+    { label: 'Занято мест', value: cardsInfo[1].value, color: 'red' },
+    { label: 'Свободно мест', value: cardsInfo[2].value, color: 'green' },
   ]
 
   return (

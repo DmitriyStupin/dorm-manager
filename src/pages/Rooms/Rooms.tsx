@@ -26,7 +26,7 @@ import { getRoomStatus } from '../../utils/getRoomStatus.ts'
 import { rooms } from '../../mocks/rooms.ts'
 import { students } from '../../mocks/students.ts'
 import { getRoomOccupied } from '../../utils/getRoomOccupied.ts'
-import {getRoomsStats} from "../../utils/getRoomsStats.ts";
+import { getRoomsStats } from '../../utils/getRoomsStats.ts'
 
 const Rooms = () => {
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null)

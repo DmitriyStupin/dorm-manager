@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material'
 import * as React from 'react'
 
 type InfoItemProps = {
-  label: string;
+  label: string
   value: React.ReactNode
 }
 

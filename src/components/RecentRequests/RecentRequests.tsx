@@ -1,16 +1,16 @@
 import {
-  Box,
   Card,
   CardContent,
   Chip,
-  Divider,
   List,
   ListItem,
   ListItemText,
   Typography,
 } from '@mui/material'
-import { Fragment } from 'react'
-import { requests } from '../../config/requests.ts'
+import { requests } from '../../mocks/requests.ts'
+import { rooms } from '../../mocks/rooms.ts'
+import { formatDate } from '../../utils/formateDate.ts'
+import { Link } from 'react-router-dom'
 
 const RecentRequests = () => {
   const colorStatus = {
@@ -31,27 +31,52 @@ const RecentRequests = () => {
       <CardContent>
         <Typography variant={'h6'}>Последние заявки</Typography>
         <List>
-          {requests.map((request, index) => (
-            <Fragment key={request.requestID}>
-              <ListItem
-                sx={{ display: 'flex', justifyContent: 'space-between', p: 0 }}
-              >
-                <Box>
+          {requests
+            .slice(-5)
+            .reverse()
+            .map((request, index) => {
+              const room = rooms.find((room) => room.id === request.roomId)
+
+              return (
+                <ListItem
+                  key={request.id}
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    p: 0,
+                    borderBottom:
+                      index !== requests.slice(-5).length - 1
+                        ? '1px solid'
+                        : 'none',
+                    borderColor: 'divider',
+                  }}
+                >
                   <ListItemText
-                    primary={request.title}
-                    secondary={`Заявка #${request.requestID} · Комната ${request.room} ·
-                    ${request.date}`}
+                    primary={request.description}
+                    secondary={`Заявка #${request.id} · Комната ${room?.number} · ${formatDate(request.createdAt)}`}
                   />
-                </Box>
-                <Chip
-                  label={request.status}
-                  color={colorStatus[request.status]}
-                />
-              </ListItem>
-              {index !== requests.length - 1 && <Divider />}
-            </Fragment>
-          ))}
+
+                  <Chip
+                    label={request.status}
+                    color={colorStatus[request.status]}
+                  />
+                </ListItem>
+              )
+            })}
         </List>
+        <Typography sx={{ textAlign: 'center' }}>
+          <Link
+            to="/requests"
+            style={{
+              textDecoration: 'none',
+              fontSize: '14px',
+              color: '#1976d2',
+              fontWeight: 500,
+            }}
+          >
+            Все заявки
+          </Link>
+        </Typography>
       </CardContent>
     </Card>
   )

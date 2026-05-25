@@ -17,7 +17,7 @@ import InfoItem from '../InfoItem/InfoItem.tsx'
 import type { Room } from '../../types/room.ts'
 import { getRoomStatus } from '../../utils/getRoomStatus.ts'
 import { students } from '../../mocks/students.ts'
-import {getRoomOccupied} from "../../utils/getRoomOccupied.ts";
+import { getRoomOccupied } from '../../utils/getRoomOccupied.ts'
 
 type RoomDetailsDialogProps = {
   isOpen: boolean
@@ -27,7 +27,7 @@ type RoomDetailsDialogProps = {
 
 const RoomDetailsDialog = (props: RoomDetailsDialogProps) => {
   const { isOpen, handleClose, room } = props
-  
+
   if (!room) return null
 
   const roomStudents = students.filter((student) => student.roomId === room?.id)
@@ -35,7 +35,6 @@ const RoomDetailsDialog = (props: RoomDetailsDialogProps) => {
   const occupied = getRoomOccupied(room.id, students)
 
   const roomStatus = getRoomStatus(room?.capacity, occupied)
-
 
   return (
     <Dialog fullWidth maxWidth="sm" open={isOpen} onClose={handleClose}>

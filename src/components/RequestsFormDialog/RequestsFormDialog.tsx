@@ -6,7 +6,8 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  FormControl, FormHelperText,
+  FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
@@ -48,13 +49,13 @@ const RequestsFormDialog = (props: RequestsFormDialogProps) => {
       reset({
         description: request.description,
         roomId: request.roomId,
-        status: request.status
+        status: request.status,
       })
     } else {
       reset({
         description: '',
         roomId: '',
-        status: 'новое'
+        status: 'новое',
       })
     }
   }, [request, reset])
@@ -96,7 +97,7 @@ const RequestsFormDialog = (props: RequestsFormDialogProps) => {
           <Controller
             control={control}
             name="roomId"
-            render={({ field }) => (  
+            render={({ field }) => (
               <Autocomplete
                 options={rooms}
                 getOptionLabel={(room) => room.number}

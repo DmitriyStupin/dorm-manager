@@ -3,7 +3,7 @@ import type { Student } from '../types/student.ts'
 import { getRoomStatus } from './getRoomStatus.ts'
 import { getRoomOccupied } from './getRoomOccupied.ts'
 
-export const getRoomsStats = (rooms: Room[], students: Student[])=> {
+export const getRoomsStats = (rooms: Room[], students: Student[]) => {
   let free = 0
   let partial = 0
   let full = 0
@@ -25,7 +25,7 @@ export const getRoomsStats = (rooms: Room[], students: Student[])=> {
       full++
     }
   }
-  
+
   return [
     {
       title: 'Всего комнат',

@@ -112,8 +112,6 @@ const Requests = () => {
     выполнено: 'success',
   }
 
-
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <Box
@@ -192,37 +190,42 @@ const Requests = () => {
               paginatedRepairRequests.map((request) => {
                 const room = rooms.find((room) => room.id === request.roomId)
 
-              return (
-                <TableRow
-                  key={request.id}
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: 'rgba(0,0,0,0.05)',
-                      transitionDuration: '0.2s',
-                    },
-                    '&:last-child td, &:last-child th': { border: 0 },
-                  }}
-                >
-                  <TableCell>#{request.id}</TableCell>
-                  <TableCell>{request.description}</TableCell>
-                  <TableCell align={'center'}>{room?.number}</TableCell>
-                  <TableCell align={'center'}>{formatDate(request.createdAt)}</TableCell>
-                  <TableCell align={'center'}>
-                    <Chip
-                      label={request.status}
-                      color={requestStatusColors[request.status]}
-                    />
-                  </TableCell>
-                  <TableCell align={'right'}>
-                    <IconButton onClick={() => handleEditRequest(request)}>
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton onClick={() => handleDeleteRequest(request.id)}>
-                      <DeleteIcon color={'error'} />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              )})
+                return (
+                  <TableRow
+                    key={request.id}
+                    sx={{
+                      '&:hover': {
+                        backgroundColor: 'rgba(0,0,0,0.05)',
+                        transitionDuration: '0.2s',
+                      },
+                      '&:last-child td, &:last-child th': { border: 0 },
+                    }}
+                  >
+                    <TableCell>#{request.id}</TableCell>
+                    <TableCell>{request.description}</TableCell>
+                    <TableCell align={'center'}>{room?.number}</TableCell>
+                    <TableCell align={'center'}>
+                      {formatDate(request.createdAt)}
+                    </TableCell>
+                    <TableCell align={'center'}>
+                      <Chip
+                        label={request.status}
+                        color={requestStatusColors[request.status]}
+                      />
+                    </TableCell>
+                    <TableCell align={'right'}>
+                      <IconButton onClick={() => handleEditRequest(request)}>
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => handleDeleteRequest(request.id)}
+                      >
+                        <DeleteIcon color={'error'} />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                )
+              })
             ) : (
               <TableRow>
                 <TableCell colSpan={6}>

@@ -16,7 +16,7 @@ import type { Student, StudentFormData } from '../../types/student.ts'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { studentSchema } from '../../student.schema.ts'
-import {useEffect} from "react";
+import { useEffect } from 'react'
 import { rooms } from '../../mocks/rooms.ts'
 
 type StudentFormDialogProps = {
@@ -64,7 +64,7 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
         phone: '',
       })
     }
-  }, [student, reset]);
+  }, [student, reset])
 
   const submitHandler = (data: StudentFormData) => {
     onSubmit(data)

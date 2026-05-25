@@ -25,7 +25,7 @@ import { useState } from 'react'
 import StudentFormDialog from '../../components/StudentFormDialog/StudentFormDialog.tsx'
 import type { Student, StudentFormData } from '../../types/student.ts'
 import { students as mockStudents } from '../../mocks/students.ts'
-import {rooms} from "../../mocks/rooms.ts";
+import { rooms } from '../../mocks/rooms.ts'
 
 const Students = () => {
   const [students, setStudents] = useState<Student[]>(mockStudents)
@@ -195,9 +195,7 @@ const Students = () => {
                 >
                   <TableCell>{student.fullName}</TableCell>
                   <TableCell align={'center'}>
-                    {
-                      rooms.find((room) => room.id === student.roomId)?.number
-                    }
+                    {rooms.find((room) => room.id === student.roomId)?.number}
                   </TableCell>
                   <TableCell align={'center'}>{student.institute}</TableCell>
                   <TableCell align={'center'}>

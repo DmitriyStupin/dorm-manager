@@ -8,7 +8,6 @@ import { requests } from '../mocks/requests.ts'
 
 const dormInfo = getDormStats(rooms, students)
 
-
 export const cardsInfo = [
   {
     icon: <PersonIcon />,
