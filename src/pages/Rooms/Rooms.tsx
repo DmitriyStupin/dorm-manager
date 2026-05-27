@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Card,
@@ -14,6 +15,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
   TextField,
   Typography,
@@ -27,11 +29,17 @@ import { rooms } from '../../mocks/rooms.ts'
 import { students } from '../../mocks/students.ts'
 import { getRoomOccupied } from '../../utils/getRoomOccupied.ts'
 import { getRoomsStats } from '../../utils/getRoomsStats.ts'
+import * as React from 'react'
 
 const Rooms = () => {
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null)
   const [searchItem, setSearchItem] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
+  const [page, setPage] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(10)
+
+  const start = page * rowsPerPage
+  const end = start + rowsPerPage
 
   const stats = getRoomsStats(rooms, students)
 
@@ -52,9 +60,23 @@ const Rooms = () => {
     return matchesSearch && matchesStatus
   })
 
+  const paginatedRooms = filteredRooms.slice(start, end)
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
+  }
+
+  const handleChangePage = (_event: unknown, newPage: number)=> {
+    setPage(newPage)
+  }
+
   const handleResetFilters = () => {
     setSearchItem('')
     setStatusFilter('')
+    setPage(0)
   }
 
   return (
@@ -109,6 +131,7 @@ const Rooms = () => {
               value={searchItem}
               onChange={(event) => {
                 setSearchItem(event.target.value)
+                setPage(0)
               }}
             />
           </Grid>
@@ -121,6 +144,7 @@ const Rooms = () => {
                 value={statusFilter}
                 onChange={(event) => {
                   setStatusFilter(event.target.value)
+                  setPage(0)
                 }}
               >
                 <MenuItem value={'success'}>Свободно</MenuItem>
@@ -164,43 +188,61 @@ const Rooms = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredRooms.map((room) => {
-              const occupied = getRoomOccupied(room.id, students)
-              const roomStatus = getRoomStatus(room.capacity, occupied)
+            {paginatedRooms.length > 0 ? (
+              paginatedRooms.map((room) => {
+                const occupied = getRoomOccupied(room.id, students)
+                const roomStatus = getRoomStatus(room.capacity, occupied)
 
-              return (
-                <TableRow
-                  key={room.id}
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: 'rgba(0,0,0,0.05)',
-                      transitionDuration: '0.2s',
-                    },
-                    '&:last-child td, &:last-child th': { border: 0 },
-                  }}
-                >
-                  <TableCell>{room.number}</TableCell>
-                  <TableCell align={'center'}>{room.floor}</TableCell>
-                  <TableCell align={'center'}>{room.capacity} места</TableCell>
-                  <TableCell align={'center'}>{occupied}</TableCell>
-                  <TableCell align={'center'}>
-                    <Chip label={roomStatus.label} color={roomStatus.color} />
-                  </TableCell>
-                  <TableCell align={'right'}>
-                    <Button
-                      variant={'contained'}
-                      onClick={() => {
-                        setSelectedRoom(room)
-                      }}
-                    >
-                      Подробнее
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              )
-            })}
+                return (
+                  <TableRow
+                    key={room.id}
+                    sx={{
+                      '&:hover': {
+                        backgroundColor: 'rgba(0,0,0,0.05)',
+                        transitionDuration: '0.2s',
+                      },
+                      '&:last-child td, &:last-child th': { border: 0 },
+                    }}
+                  >
+                    <TableCell>{room.number}</TableCell>
+                    <TableCell align={'center'}>{room.floor}</TableCell>
+                    <TableCell align={'center'}>{room.capacity} места</TableCell>
+                    <TableCell align={'center'}>{occupied}</TableCell>
+                    <TableCell align={'center'}>
+                      <Chip label={roomStatus.label} color={roomStatus.color} />
+                    </TableCell>
+                    <TableCell align={'right'}>
+                      <Button
+                        variant={'contained'}
+                        onClick={() => {
+                          setSelectedRoom(room)
+                        }}
+                      >
+                        Подробнее
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                )
+              })
+            ) : (
+              <TableRow>
+                <TableCell colSpan={6}>
+                  <Alert severity={'error'}>Комната не найдена</Alert>
+                </TableCell>
+              </TableRow>
+            )}
+
           </TableBody>
         </Table>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 50]}
+          component={'div'}
+          count={filteredRooms.length}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </TableContainer>
       <RoomDetailsDialog
         isOpen={Boolean(selectedRoom)}
