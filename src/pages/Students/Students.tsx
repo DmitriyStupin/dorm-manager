@@ -31,7 +31,7 @@ const Students = () => {
   const [students, setStudents] = useState<Student[]>(mockStudents)
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [rowsPerPage, setRowsPerPage] = useState(10)
   const [searchItem, setSearchItem] = useState('')
   const [open, setOpen] = useState(false)
 
@@ -228,7 +228,7 @@ const Students = () => {
           </TableBody>
         </Table>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 25, 50]}
           component={'div'}
           count={filteredStudents.length}
           page={page}
