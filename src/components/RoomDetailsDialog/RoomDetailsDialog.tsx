@@ -16,7 +16,7 @@ import {
 import InfoItem from '../InfoItem/InfoItem.tsx'
 import type { Room } from '../../types/room.ts'
 import { getRoomStatus } from '../../utils/getRoomStatus.ts'
-import { students } from '../../mocks/students.ts'
+import { useStudentsStore } from '../../store/useStudentsStore'
 import { getRoomOccupied } from '../../utils/getRoomOccupied.ts'
 
 type RoomDetailsDialogProps = {
@@ -27,6 +27,8 @@ type RoomDetailsDialogProps = {
 
 const RoomDetailsDialog = (props: RoomDetailsDialogProps) => {
   const { isOpen, handleClose, room } = props
+
+  const students = useStudentsStore((state) => state.students)
 
   if (!room) return null
 

@@ -25,8 +25,8 @@ import { useState } from 'react'
 import RoomDetailsDialog from '../../components/RoomDetailsDialog/RoomDetailsDialog.tsx'
 import type { Room } from '../../types/room.ts'
 import { getRoomStatus } from '../../utils/getRoomStatus.ts'
-import { rooms } from '../../mocks/rooms.ts'
-import { students } from '../../mocks/students.ts'
+import { useStudentsStore } from '../../store/useStudentsStore'
+import { useRoomsStore } from '../../store/useRoomsStore'
 import { getRoomOccupied } from '../../utils/getRoomOccupied.ts'
 import { getRoomsStats } from '../../utils/getRoomsStats.ts'
 import * as React from 'react'
@@ -37,6 +37,8 @@ const Rooms = () => {
   const [statusFilter, setStatusFilter] = useState('')
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
+  const rooms = useRoomsStore((state) => state.rooms)
+  const students = useStudentsStore((state) => state.students)
 
   const start = page * rowsPerPage
   const end = start + rowsPerPage

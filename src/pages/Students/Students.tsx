@@ -24,11 +24,15 @@ import * as React from 'react'
 import { useState } from 'react'
 import StudentFormDialog from '../../components/StudentFormDialog/StudentFormDialog.tsx'
 import type { Student, StudentFormData } from '../../types/student.ts'
-import { students as mockStudents } from '../../mocks/students.ts'
-import { rooms } from '../../mocks/rooms.ts'
+import { useStudentsStore } from '../../store/useStudentsStore'
+import { useRoomsStore } from '../../store/useRoomsStore'
 
 const Students = () => {
-  const [students, setStudents] = useState<Student[]>(mockStudents)
+  const students = useStudentsStore((state) => state.students)
+  const addStudent = useStudentsStore((state) => state.addStudent)
+  const updateStudent = useStudentsStore((state) => state.updateStudent)
+  const deleteStudent = useStudentsStore((state) => state.deleteStudent)
+  const rooms = useRoomsStore((state) => state.rooms)
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
@@ -70,7 +74,8 @@ const Students = () => {
   }
 
   const handleDeleteStudent = (id: number) => {
-    setStudents((prev) => prev.filter((student) => student.id !== id))
+    deleteStudent(id)
+
     if (paginatedStudents.length - 1 === 0) {
       setPage(0)
     }
@@ -78,24 +83,9 @@ const Students = () => {
 
   const handleSubmitStudent = (data: StudentFormData) => {
     if (selectedStudent) {
-      setStudents((prev) =>
-        prev.map((student) =>
-          student.id === selectedStudent.id
-            ? {
-                ...student,
-                ...data,
-              }
-            : student,
-        ),
-      )
+      updateStudent(selectedStudent.id, data)
     } else {
-      const newStudent: Student = {
-        id: Date.now(),
-        ...data,
-        debt: 0,
-      }
-
-      setStudents((prev) => [...prev, newStudent])
+      addStudent(data)
     }
 
     handleClose()
