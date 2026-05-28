@@ -1,8 +1,10 @@
 import { Box, Typography } from '@mui/material'
 import { PieChart } from '@mui/x-charts/PieChart'
 import { useDormInfo } from '../../hooks/useDormInfo.tsx'
+import { useTheme } from '@mui/material/styles'
 
 const OccupancyChart = () => {
+  const theme = useTheme()
   const cardsInfo = useDormInfo()
 
   const occupancyChartData = [
@@ -16,7 +18,7 @@ const OccupancyChart = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        background: '#ffffff',
+        backgroundColor: theme.palette.background.paper,
         paddingBlock: 3,
         borderRadius: 2,
         border: '1px solid rgba(0, 0, 0, 0.12)',
