@@ -1,8 +1,10 @@
 import { Box, Typography } from '@mui/material'
 import { PieChart } from '@mui/x-charts/PieChart'
-import { cardsInfo } from '../../config/dormInfo.tsx'
+import { useDormInfo } from '../../hooks/useDormInfo.tsx'
 
 const OccupancyChart = () => {
+  const cardsInfo = useDormInfo()
+
   const occupancyChartData = [
     { label: 'Занято мест', value: cardsInfo[1].value, color: 'red' },
     { label: 'Свободно мест', value: cardsInfo[2].value, color: 'green' },

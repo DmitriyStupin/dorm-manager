@@ -18,6 +18,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { studentSchema } from '../../student.schema.ts'
 import { useEffect } from 'react'
 import { rooms } from '../../mocks/rooms.ts'
+import {getRoomOccupied} from "../../utils/getRoomOccupied.ts";
+import {useStudentsStore} from "../../store/useStudentsStore.ts";
 
 type StudentFormDialogProps = {
   open: boolean
@@ -28,6 +30,8 @@ type StudentFormDialogProps = {
 
 const StudentFormDialog = (props: StudentFormDialogProps) => {
   const { open, handleClose, onSubmit, student } = props
+
+  const students = useStudentsStore((state) => state.students)
 
   const {
     register,
@@ -70,6 +74,16 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
     onSubmit(data)
     reset()
   }
+
+  const availableRooms = rooms.filter((room) => {
+    const occupied = getRoomOccupied(room.id, students)
+
+    if (student?.roomId === room.id) {
+      return true
+    }
+
+    return occupied < room.capacity
+  })
 
   return (
     <Dialog
@@ -120,10 +134,10 @@ const StudentFormDialog = (props: StudentFormDialogProps) => {
             name={'roomId'}
             render={({ field }) => (
               <Autocomplete
-                options={rooms}
+                options={availableRooms}
                 getOptionLabel={(option) => option.number}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
-                value={rooms.find((room) => room.id === field.value) || null}
+                value={availableRooms.find((room) => room.id === field.value) || null}
                 onChange={(_, value) => field.onChange(value?.id || '')}
                 renderInput={(params) => (
                   <TextField

@@ -1,8 +1,10 @@
 import StatCard from '../StatCard/StatCard.tsx'
 import { Box } from '@mui/material'
-import { cardsInfo } from '../../config/dormInfo.tsx'
+import { useDormInfo } from '../../hooks/useDormInfo.tsx'
 
 const StatsCards = () => {
+  const cardsInfo = useDormInfo()
+
   return (
     <Box
       sx={{
