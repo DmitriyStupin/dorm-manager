@@ -25,16 +25,20 @@ import * as React from 'react'
 import { useState } from 'react'
 import RequestsFormDialog from '../../components/RequestsFormDialog/RequestsFormDialog.tsx'
 import type { Request, RequestFormData } from '../../types/request.ts'
-import { requests as mockRequests } from '../../mocks/requests.ts'
 import { rooms } from '../../mocks/rooms.ts'
+import { useRequestsStore } from '../../store/useRequestsStore.ts'
 
 const Requests = () => {
-  const [requests, setRequests] = useState<Request[]>(mockRequests)
+  const requests = useRequestsStore((state) => state.requests)
   const [selectedRequest, setSelectedRequest] = useState<Request | null>(null)
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [searchItem, setSearchItem] = useState('')
   const [open, setOpen] = useState(false)
+
+  const addRequest = useRequestsStore((state) => state.addRequest)
+  const updateRequest = useRequestsStore((state) => state.updateRequest)
+  const deleteRequest = useRequestsStore((state) => state.deleteRequest)
 
   const start = page * rowsPerPage
   const end = start + rowsPerPage
@@ -75,10 +79,7 @@ const Requests = () => {
   }
 
   const handleDeleteRequest = (id: number) => {
-    setRequests((prev) => prev.filter((request) => request.id !== id))
-    if (paginatedRepairRequests.length - 1 === 0) {
-      setPage(0)
-    }
+    deleteRequest(id)
   }
 
   const formatDate = (date: string) => {
@@ -87,20 +88,9 @@ const Requests = () => {
 
   const handleSubmitRequest = (data: RequestFormData) => {
     if (selectedRequest) {
-      setRequests((prev) =>
-        prev.map((request) =>
-          request.id === selectedRequest.id ? { ...request, ...data } : request,
-        ),
-      )
+      updateRequest(selectedRequest.id, data)
     } else {
-      const newRequest: Request = {
-        id: Date.now(),
-        ...data,
-        status: 'новое',
-        createdAt: new Date().toISOString().split('T')[0],
-      }
-
-      setRequests((prev) => [...prev, newRequest])
+      addRequest(data)
     }
 
     handleClose()

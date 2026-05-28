@@ -3,14 +3,15 @@ import DoorIcon from '@mui/icons-material/SensorDoor'
 import RequestIcon from '@mui/icons-material/Description'
 
 import { getDormStats } from '../utils/getDormStats.ts'
-import { requests } from '../mocks/requests.ts'
 
 import { useRoomsStore } from '../store/useRoomsStore.ts'
 import { useStudentsStore } from '../store/useStudentsStore.ts'
+import { useRequestsStore } from '../store/useRequestsStore.ts'
 
 export const useDormInfo = () => {
   const rooms = useRoomsStore((state) => state.rooms)
   const students = useStudentsStore((state) => state.students)
+  const requests = useRequestsStore((state) => state.requests)
 
   const dormInfo = getDormStats(rooms, students)
 

@@ -11,4 +11,5 @@ export type Request = {
 export type RequestFormData = {
   description: string
   roomId: string
+  status?: RequestStatus
 }

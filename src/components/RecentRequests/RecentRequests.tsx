@@ -7,12 +7,14 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material'
-import { requests } from '../../mocks/requests.ts'
 import { rooms } from '../../mocks/rooms.ts'
 import { formatDate } from '../../utils/formateDate.ts'
 import { Link } from 'react-router-dom'
+import { useRequestsStore } from '../../store/useRequestsStore.ts'
 
 const RecentRequests = () => {
+  const requests = useRequestsStore((state) => state.requests)
+
   const colorStatus = {
     новое: 'info',
     'в процессе': 'warning',
