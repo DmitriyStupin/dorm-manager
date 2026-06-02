@@ -36,7 +36,7 @@ const Rooms = () => {
   const [searchItem, setSearchItem] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [rowsPerPage, setRowsPerPage] = useState(20)
   const rooms = useRoomsStore((state) => state.rooms)
   const students = useStudentsStore((state) => state.students)
 
@@ -237,7 +237,7 @@ const Rooms = () => {
           </TableBody>
         </Table>
         <TablePagination
-          rowsPerPageOptions={[10, 25, 50]}
+          rowsPerPageOptions={[20, 50, 100]}
           component={'div'}
           count={filteredRooms.length}
           page={page}

@@ -29,7 +29,7 @@ const Layout = (props: LayoutProps) => {
       >
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button variant="outlined" onClick={toggleTheme}>
-            {mode === 'light' ? '🌙 Dark' : '☀️ Light'}
+            {mode === 'light' ? 'Темная тема' : 'Светлая тема'}
           </Button>
         </Box>
         <Outlet />
